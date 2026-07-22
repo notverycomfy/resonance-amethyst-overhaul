@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "active=false,phase=0": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=1": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=2": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=3": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=4": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=5": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=6": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=7": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=8": { "model": "resonance:block/chorus_resonator" },
+    "active=false,phase=9": { "model": "resonance:block/chorus_resonator" },
+    "active=true,phase=0": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=1": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=2": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=3": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=4": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=5": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=6": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=7": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=8": { "model": "resonance:block/chorus_resonator_active" },
+    "active=true,phase=9": { "model": "resonance:block/chorus_resonator_active" }
+  }
+}

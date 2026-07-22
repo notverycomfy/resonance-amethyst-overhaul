@@ -1,0 +1,8 @@
+{
+  "parent": "resonance:block/chorus_resonator",
+  "textures": {
+    "top": "minecraft:block/budding_amethyst",
+    "side": "minecraft:block/amethyst_block",
+    "bottom": "minecraft:block/smooth_basalt"
+  }
+}

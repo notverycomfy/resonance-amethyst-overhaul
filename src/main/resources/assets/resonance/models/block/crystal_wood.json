@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "resonance:block/crystal_log",
+    "end": "resonance:block/crystal_log"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "resonance:summon_the_harmonic",
+  "display": {
+    "icon": { "id": "resonance:harmonic_fragment" },
+    "title": { "translate": "advancements.resonance.kill_the_harmonic.title" },
+    "description": { "translate": "advancements.resonance.kill_the_harmonic.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "killed": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": { "type": "resonance:the_harmonic" }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [ [ "killed" ] ]
+}

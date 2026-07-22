@@ -1,0 +1,20 @@
+{
+  "parent": "resonance:root",
+  "display": {
+    "icon": { "id": "resonance:crystal_fragment" },
+    "title": { "translate": "advancements.resonance.summon_the_harmonic.title" },
+    "description": { "translate": "advancements.resonance.summon_the_harmonic.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "summoned": {
+      "trigger": "minecraft:summoned_entity",
+      "conditions": {
+        "entity": { "type": "resonance:the_harmonic" }
+      }
+    }
+  },
+  "requirements": [ [ "summoned" ] ]
+}

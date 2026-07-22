@@ -1,0 +1,9 @@
+{
+  "criteria": {
+    "unlock": { "trigger": "minecraft:tick" }
+  },
+  "requirements": [["unlock"]],
+  "rewards": {
+    "recipes": ["resonance:resonant_arrow"]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "A",
+    "S",
+    "F"
+  ],
+  "key": {
+    "A": "resonance:amethyst_ingot",
+    "S": "minecraft:stick",
+    "F": "minecraft:feather"
+  },
+  "result": {
+    "id": "resonance:resonant_arrow",
+    "count": 4
+  }
+}

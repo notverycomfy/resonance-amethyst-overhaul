@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "R": "resonance:amethyst_ingot"
+  },
+  "pattern": [
+    "RRR",
+    "R R",
+    "R R"
+  ],
+  "result": { "id": "resonance:resonant_leggings" }
+}

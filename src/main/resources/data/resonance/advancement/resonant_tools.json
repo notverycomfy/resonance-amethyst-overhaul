@@ -1,0 +1,30 @@
+{
+  "parent": "resonance:root",
+  "display": {
+    "icon": { "id": "resonance:resonant_pickaxe" },
+    "title": { "translate": "advancements.resonance.resonant_tools.title" },
+    "description": { "translate": "advancements.resonance.resonant_tools.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_pickaxe" } ] }
+    },
+    "has_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_axe" } ] }
+    },
+    "has_shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_shovel" } ] }
+    },
+    "has_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_hoe" } ] }
+    }
+  },
+  "requirements": [ [ "has_pickaxe" ], [ "has_axe" ], [ "has_shovel" ], [ "has_hoe" ] ]
+}

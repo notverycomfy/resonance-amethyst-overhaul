@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "id": "resonance:amethyst_ingot" },
+    "title": { "translate": "advancements.resonance.root.title" },
+    "description": { "translate": "advancements.resonance.root.description" },
+    "background": "minecraft:gui/advancements/backgrounds/adventure",
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_amethyst_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:amethyst_ingot" } ] }
+    }
+  },
+  "requirements": [ [ "has_amethyst_ingot" ] ]
+}

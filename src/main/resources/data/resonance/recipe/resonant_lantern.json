@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": "resonance:amethyst_ingot",
+    "L": "minecraft:lantern"
+  },
+  "pattern": [
+    " A ",
+    "ALA",
+    " A "
+  ],
+  "result": { "id": "resonance:resonant_lantern" }
+}

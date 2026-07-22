@@ -1,0 +1,34 @@
+{
+  "layers": {
+    "horse_body": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ],
+    "humanoid": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ],
+    "nautilus_body": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ],
+    "wolf_body": [
+      {
+        "texture": "resonance:resonant"
+      }
+    ]
+  }
+}

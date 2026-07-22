@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "resonance:block/stripped_crystal_log",
+    "end": "resonance:block/stripped_crystal_log_top"
+  }
+}

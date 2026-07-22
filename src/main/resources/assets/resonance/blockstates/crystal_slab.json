@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "resonance:block/crystal_slab"
+    },
+    "type=top": {
+      "model": "resonance:block/crystal_slab_top"
+    },
+    "type=double": {
+      "model": "resonance:block/crystal_planks"
+    }
+  }
+}

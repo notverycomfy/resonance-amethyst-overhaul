@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=false": { "model": "resonance:block/frequency_relay" },
+    "active=true": { "model": "resonance:block/frequency_relay_active" }
+  }
+}

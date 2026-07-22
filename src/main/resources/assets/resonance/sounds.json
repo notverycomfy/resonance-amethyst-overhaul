@@ -1,0 +1,62 @@
+{
+  "resonance_chime": {
+    "subtitle": "subtitles.resonance.chime",
+    "sounds": [
+      "minecraft:block/amethyst/shimmer1"
+    ]
+  },
+  "resonance_pulse": {
+    "subtitle": "subtitles.resonance.pulse",
+    "sounds": [
+      "minecraft:block/amethyst_cluster/break1"
+    ]
+  },
+  "harmonic_shield_absorb": {
+    "subtitle": "subtitles.resonance.shield_absorb",
+    "sounds": [
+      "minecraft:block/amethyst/resonate"
+    ]
+  },
+  "harmonic_shield_recharge": {
+    "subtitle": "subtitles.resonance.shield_recharge",
+    "sounds": [
+      "minecraft:block/amethyst/chime"
+    ]
+  },
+  "stalker_laugh": {
+    "sounds": [
+      "resonance:entity/resonant_stalker/laugh"
+    ]
+  },
+  "entity.crystal_wraith.ambient": {
+    "subtitle": "subtitles.resonance.crystal_wraith.ambient",
+    "sounds": [
+      "resonance:entity/crystal_wraith/ambient1",
+      "resonance:entity/crystal_wraith/ambient2",
+      "resonance:entity/crystal_wraith/ambient3"
+    ]
+  },
+  "entity.crystal_wraith.hurt": {
+    "subtitle": "subtitles.resonance.crystal_wraith.hurt",
+    "sounds": [
+      "resonance:entity/crystal_wraith/hurt1",
+      "resonance:entity/crystal_wraith/hurt2"
+    ]
+  },
+  "entity.crystal_wraith.death": {
+    "subtitle": "subtitles.resonance.crystal_wraith.death",
+    "sounds": ["resonance:entity/crystal_wraith/death"]
+  },
+  "entity.crystal_wraith.emerge": {
+    "subtitle": "subtitles.resonance.crystal_wraith.emerge",
+    "sounds": ["resonance:entity/crystal_wraith/emerge"]
+  },
+  "entity.crystal_wraith.armor_break": {
+    "subtitle": "subtitles.resonance.crystal_wraith.armor_break",
+    "sounds": ["resonance:entity/crystal_wraith/armor_break"]
+  },
+  "entity.crystal_wraith.attack": {
+    "subtitle": "subtitles.resonance.crystal_wraith.attack",
+    "sounds": ["resonance:entity/crystal_wraith/attack"]
+  }
+}

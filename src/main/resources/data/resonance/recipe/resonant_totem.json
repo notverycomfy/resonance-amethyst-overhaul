@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "resonance:amethyst_ingot",
+    "T": "minecraft:totem_of_undying"
+  },
+  "pattern": [
+    " A ",
+    "ATA",
+    " A "
+  ],
+  "result": { "id": "resonance:resonant_totem" }
+}

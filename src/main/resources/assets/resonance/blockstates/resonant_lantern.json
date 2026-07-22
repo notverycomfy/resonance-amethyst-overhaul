@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "hanging=false,waterlogged=false": { "model": "resonance:block/resonant_lantern" },
+    "hanging=false,waterlogged=true": { "model": "resonance:block/resonant_lantern" },
+    "hanging=true,waterlogged=false": { "model": "resonance:block/resonant_lantern_hanging" },
+    "hanging=true,waterlogged=true": { "model": "resonance:block/resonant_lantern_hanging" }
+  }
+}

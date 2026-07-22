@@ -1,0 +1,75 @@
+{
+  "parent": "resonance:resonant_tools",
+  "display": {
+    "icon": { "id": "resonance:resonant_axe" },
+    "title": { "translate": "advancements.resonance.full_arsenal.title" },
+    "description": { "translate": "advancements.resonance.full_arsenal.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_sword" } ] }
+    },
+    "has_spear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_spear" } ] }
+    },
+    "has_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_pickaxe" } ] }
+    },
+    "has_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_axe" } ] }
+    },
+    "has_shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_shovel" } ] }
+    },
+    "has_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_hoe" } ] }
+    },
+    "has_helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_helmet" } ] }
+    },
+    "has_chestplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_chestplate" } ] }
+    },
+    "has_leggings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_leggings" } ] }
+    },
+    "has_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_boots" } ] }
+    },
+    "has_arrow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_arrow" } ] }
+    },
+    "has_horse_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_horse_armor" } ] }
+    },
+    "has_nautilus_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_nautilus_armor" } ] }
+    },
+    "has_wolf_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_wolf_armor" } ] }
+    }
+  },
+  "requirements": [
+    [ "has_sword" ], [ "has_spear" ], [ "has_pickaxe" ], [ "has_axe" ],
+    [ "has_shovel" ], [ "has_hoe" ], [ "has_helmet" ], [ "has_chestplate" ],
+    [ "has_leggings" ], [ "has_boots" ], [ "has_arrow" ], [ "has_horse_armor" ],
+    [ "has_nautilus_armor" ], [ "has_wolf_armor" ]
+  ]
+}

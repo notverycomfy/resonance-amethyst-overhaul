@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:baked_potato",
+    "resonance:cooked_crystal_rabbit",
+    "minecraft:bowl",
+    "minecraft:carrot",
+    "#resonance:mushrooms"
+  ],
+  "result": { "id": "resonance:crystal_rabbit_stew" }
+}

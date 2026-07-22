@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "resonance:crystal_log",
+    "resonance:stripped_crystal_log",
+    "resonance:crystal_wood",
+    "resonance:stripped_crystal_wood"
+  ]
+}

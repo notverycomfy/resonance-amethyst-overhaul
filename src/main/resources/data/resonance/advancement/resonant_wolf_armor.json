@@ -1,0 +1,18 @@
+{
+  "parent": "resonance:resonant_armor",
+  "display": {
+    "icon": { "id": "resonance:resonant_wolf_armor" },
+    "title": { "translate": "advancements.resonance.resonant_wolf_armor.title" },
+    "description": { "translate": "advancements.resonance.resonant_wolf_armor.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_wolf_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_wolf_armor" } ] }
+    }
+  },
+  "requirements": [ [ "has_wolf_armor" ] ]
+}

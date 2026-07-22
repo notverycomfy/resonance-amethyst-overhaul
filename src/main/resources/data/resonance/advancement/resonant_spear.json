@@ -1,0 +1,18 @@
+{
+  "parent": "resonance:resonant_sword",
+  "display": {
+    "icon": { "id": "resonance:resonant_spear" },
+    "title": { "translate": "advancements.resonance.resonant_spear.title" },
+    "description": { "translate": "advancements.resonance.resonant_spear.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_resonant_spear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_spear" } ] }
+    }
+  },
+  "requirements": [ [ "has_resonant_spear" ] ]
+}

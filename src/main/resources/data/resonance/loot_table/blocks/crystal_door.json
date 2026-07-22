@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "resonance:blocks/crystal_door",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "resonance:crystal_door",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "resonance:crystal_door",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

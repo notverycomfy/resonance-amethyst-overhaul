@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "A A",
+    "AAA",
+    "A A"
+  ],
+  "key": {
+    "A": "resonance:crystal_scute"
+  },
+  "result": {
+    "id": "resonance:resonant_wolf_armor",
+    "count": 1
+  }
+}

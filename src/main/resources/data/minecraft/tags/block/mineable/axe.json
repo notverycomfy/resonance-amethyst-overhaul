@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "resonance:crystal_log",
+    "resonance:stripped_crystal_log",
+    "resonance:crystal_wood",
+    "resonance:stripped_crystal_wood",
+    "resonance:crystal_planks",
+    "resonance:crystal_stairs",
+    "resonance:crystal_slab",
+    "resonance:crystal_fence",
+    "resonance:crystal_fence_gate",
+    "resonance:crystal_door",
+    "resonance:crystal_trapdoor",
+    "resonance:crystal_button",
+    "resonance:crystal_pressure_plate"
+  ]
+}

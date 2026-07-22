@@ -1,0 +1,63 @@
+{
+  "carvers": [],
+  "downfall": 0.8,
+  "effects": {
+    "fog_color": "#d8b5e0",
+    "sky_color": "#c98fd6",
+    "water_color": "#5db7ef",
+    "water_fog_color": "#5db7ef",
+    "grass_color": "#b6db61",
+    "foliage_color": "#b6db61",
+    "particle": {
+      "options": { "type": "minecraft:end_rod" },
+      "probability": 0.003
+    },
+    "mood_sound": {
+      "sound": "minecraft:block.amethyst_block.resonate",
+      "tick_delay": 4000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "ambient_sound": "minecraft:block.amethyst_block.chime"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "resonance:crystal_scatter"
+    ]
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "resonance:crystal_rabbit",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 10
+      },
+      {
+        "type": "resonance:crystal_armadillo",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 8
+      }
+    ],
+    "misc": [],
+    "monster": [],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.7
+}

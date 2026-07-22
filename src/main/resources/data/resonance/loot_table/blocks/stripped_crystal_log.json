@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "resonance:blocks/stripped_crystal_log",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "resonance:stripped_crystal_log"
+        }
+      ]
+    }
+  ]
+}

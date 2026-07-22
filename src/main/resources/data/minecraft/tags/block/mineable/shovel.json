@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "resonance:crystal_grass_block",
+    "resonance:crystal_dirt",
+    "resonance:coarse_crystal_dirt",
+    "resonance:rooted_crystal_dirt",
+    "resonance:crystal_dirt_path",
+    "resonance:crystal_farmland"
+  ]
+}

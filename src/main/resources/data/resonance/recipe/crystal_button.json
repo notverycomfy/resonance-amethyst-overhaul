@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "resonance:crystal_planks"
+  ],
+  "result": {
+    "id": "resonance:crystal_button"
+  }
+}

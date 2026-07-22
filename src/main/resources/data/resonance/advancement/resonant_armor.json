@@ -1,0 +1,30 @@
+{
+  "parent": "resonance:root",
+  "display": {
+    "icon": { "id": "resonance:resonant_chestplate" },
+    "title": { "translate": "advancements.resonance.resonant_armor.title" },
+    "description": { "translate": "advancements.resonance.resonant_armor.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_helmet" } ] }
+    },
+    "has_chestplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_chestplate" } ] }
+    },
+    "has_leggings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_leggings" } ] }
+    },
+    "has_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "resonance:resonant_boots" } ] }
+    }
+  },
+  "requirements": [ [ "has_helmet" ], [ "has_chestplate" ], [ "has_leggings" ], [ "has_boots" ] ]
+}
