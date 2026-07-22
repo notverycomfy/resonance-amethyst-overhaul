@@ -15,6 +15,10 @@ Resonance is a NeoForge mod for Minecraft 26.1.2 that expands amethyst into a co
 - Minecraft 26.1.2
 - NeoForge 26.1.2 or newer within the 26.1 line
 
+## Development Build
+
+The current private release candidate is available at [`releases/resonance-1.0.0-rc1.jar`](releases/resonance-1.0.0-rc1.jar). Its SHA-256 checksum is recorded in [`releases/SHA256SUMS.txt`](releases/SHA256SUMS.txt).
+
 ## Building
 
 ```text
