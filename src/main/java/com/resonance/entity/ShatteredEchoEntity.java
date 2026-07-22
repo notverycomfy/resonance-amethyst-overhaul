@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -133,13 +134,19 @@ public class ShatteredEchoEntity extends Monster {
         }
     }
 
-    /** Geode-only natural spawns: standard monster rules plus nearby amethyst. */
+    /**
+     * Geode-only natural spawns. Amethyst buds illuminate their chambers, so
+     * block light is deliberately ignored while skylight still prevents Echoes
+     * from spawning in exposed/player-built surface formations.
+     */
     public static boolean checkShatteredEchoSpawnRules(
             EntityType<ShatteredEchoEntity> type, ServerLevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random) {
         if (EntitySpawnReason.isSpawner(spawnReason)) {
-            return checkMonsterSpawnRules(type, level, spawnReason, pos, random);
+            return checkAnyLightMonsterSpawnRules(type, level, spawnReason, pos, random);
         }
-        return checkMonsterSpawnRules(type, level, spawnReason, pos, random) && isNearAmethyst(level, pos);
+        return checkAnyLightMonsterSpawnRules(type, level, spawnReason, pos, random)
+                && level.getBrightness(LightLayer.SKY, pos) == 0
+                && isNearAmethyst(level, pos);
     }
 
     private static boolean isNearAmethyst(ServerLevelAccessor level, BlockPos pos) {
