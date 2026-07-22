@@ -12,4 +12,7 @@
 - Unified Crystal Wraith emergence audio across spawn eggs and fracture summons, removed the remaining Warden cues, and increased the custom emergence sound's loudness.
 - Fixed Shattered Echo natural spawning inside geodes by allowing amethyst block light while continuing to require an underground, skylight-free geode environment.
 - Added a capped geode encounter spawn check so Shattered Echoes can appear while a player is exploring an interior smaller than vanilla's 24-block hostile-spawn exclusion radius.
+- Fixed The Harmonic's crystal projectiles so their shape and orientation remain stable as the viewing angle changes.
+- Corrected boss and Sentinel beam endpoints and made their full lengths participate in visibility checks.
+- Added immediate, encounter-aware boss music for The Harmonic that cleanly yields back to normal music after the fight.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.

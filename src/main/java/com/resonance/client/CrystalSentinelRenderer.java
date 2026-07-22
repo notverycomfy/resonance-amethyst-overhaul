@@ -9,6 +9,7 @@ import com.resonance.client.model.CrystalSentinelModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.monster.shulker.ShulkerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -19,6 +20,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Objects;
 
@@ -44,6 +46,21 @@ public class CrystalSentinelRenderer extends MobRenderer<CrystalSentinelEntity, 
     @Override
     public CrystalSentinelRenderState createRenderState() {
         return new CrystalSentinelRenderState();
+    }
+
+    @Override
+    public boolean shouldRender(CrystalSentinelEntity entity, Frustum culler,
+                                double camX, double camY, double camZ) {
+        if (super.shouldRender(entity, culler, camX, camY, camZ)) {
+            return true;
+        }
+        LivingEntity target = entity.getBeamTarget();
+        if (target == null) {
+            return false;
+        }
+        Vec3 start = entity.getEyePosition();
+        Vec3 end = target.position().add(0.0, target.getBbHeight() * 0.5, 0.0);
+        return culler.isVisible(new AABB(start, end).inflate(0.35));
     }
 
     @Override
@@ -82,7 +99,8 @@ public class CrystalSentinelRenderer extends MobRenderer<CrystalSentinelEntity, 
 
     private static void renderBeam(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Vec3 beamVector,
                                     float timeInTicks, float scale, float texVOff) {
-        float length = (float)(beamVector.length() + 1.0);
+        // Stop at the target rather than passing a full block through it.
+        float length = (float)beamVector.length();
         beamVector = beamVector.normalize();
         float xRot = (float)Math.acos(beamVector.y);
         float yRot = (float)(Math.PI / 2) - (float)Math.atan2(beamVector.z, beamVector.x);

@@ -4,17 +4,43 @@ import com.resonance.Resonance;
 import com.resonance.client.model.CrystalWraithModel;
 import com.resonance.client.model.ShatteredEchoModel;
 import com.resonance.client.model.TheHarmonicModel;
+import com.resonance.entity.TheHarmonicEntity;
 import com.resonance.registry.ModEntities;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.sounds.Musics;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.SelectMusicEvent;
 
 @EventBusSubscriber(modid = Resonance.MODID, value = Dist.CLIENT)
 public class ClientEvents {
+
+    private static final double HARMONIC_MUSIC_RANGE_SQR = 128.0 * 128.0;
+
+    @SubscribeEvent
+    public static void selectBossMusic(SelectMusicEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null || minecraft.player == null) {
+            return;
+        }
+
+        for (var entity : minecraft.level.entitiesForRendering()) {
+            if (entity instanceof TheHarmonicEntity boss
+                    && boss.isAlive()
+                    && boss.distanceToSqr(minecraft.player) <= HARMONIC_MUSIC_RANGE_SQR) {
+                // Uses Minecraft's dedicated boss score through the Music
+                // channel, replacing ambient music immediately and ending
+                // automatically once the encounter is no longer present.
+                event.overrideMusic(Musics.END_BOSS);
+                return;
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

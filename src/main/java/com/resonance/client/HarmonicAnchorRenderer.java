@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import com.resonance.Resonance;
 import com.resonance.entity.HarmonicAnchorEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.state.ThrownItemRenderState;
@@ -17,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 
 public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEntity> {
 
@@ -32,6 +34,21 @@ public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEnt
     @Override
     public ThrownItemRenderState createRenderState() {
         return new HarmonicAnchorRenderState();
+    }
+
+    @Override
+    public boolean shouldRender(HarmonicAnchorEntity entity, Frustum culler,
+                                double camX, double camY, double camZ) {
+        if (super.shouldRender(entity, culler, camX, camY, camZ)) {
+            return true;
+        }
+        BlockPos target = entity.getBeamTarget();
+        if (target == null) {
+            return false;
+        }
+        Vec3 start = entity.position().add(0.0, 0.6, 0.0);
+        Vec3 end = Vec3.atCenterOf(target);
+        return culler.isVisible(new AABB(start, end).inflate(0.35));
     }
 
     @Override
@@ -61,7 +78,8 @@ public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEnt
     }
 
     private static void renderBeam(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Vec3 beamVector, float timeInTicks) {
-        float length = (float)(beamVector.length() + 1.0);
+        // End at the assigned target instead of extending a block through it.
+        float length = (float)beamVector.length();
         beamVector = beamVector.normalize();
         float xRot = (float)Math.acos(beamVector.y);
         float yRot = (float)(Math.PI / 2) - (float)Math.atan2(beamVector.z, beamVector.x);
