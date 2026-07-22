@@ -8,4 +8,5 @@
 - Added the Harmonic Arena, amethyst geodes, crystal spires, and arena-safe feature placement.
 - Added Crystal Rabbit foods, Crystal Scutes, Resonant mount armor, loot integration, recipes, and advancements.
 - Added crystal dirt variants, farming support, tool interactions, particles, sounds, and vanilla creative-tab organization.
+- Corrected the Resonance chime and Harmonic shield cues to use valid vanilla amethyst sounds.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.

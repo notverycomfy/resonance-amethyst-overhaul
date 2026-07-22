@@ -169,16 +169,31 @@ This roadmap records the actual state of the mod as of July 22, 2026. Completed 
 ## Remaining Before Public Release
 
 - [ ] Run a packaged-client smoke test using the exact release JAR rather than the development run configuration.
-- [ ] Confirm client startup and create one completely new test world.
+- [x] Confirm clean client startup with the complete Resonance resource pack and renderer set.
+- [x] Create and load one completely fresh release-check world on a dedicated server.
 - [ ] Confirm Crystal Forest terrain, calcite coverage, tree variants, geodes, spires, arena protection, and natural mob spawning in that world.
 - [ ] Confirm every custom Wraith sound in-game at normal hostile-mob volume settings.
-- [ ] Confirm save/reload behavior during a Wraith fight and Harmonic encounter in the packaged build.
+- [x] Confirm Wraith, Harmonic, and Crystal Rabbit entity serialization across a full save, shutdown, and reload.
+- [ ] Confirm save/reload behavior during active Wraith and Harmonic combat in the packaged build.
 - [ ] Confirm a short multiplayer session with Wraith emergence, Sentinel beams, Resonance sweeps, particles, and the Harmonic boss bar.
 - [ ] Save the final “Echoes of the Past” CurseForge description with spoiler sections.
 - [ ] Upload the release JAR to CurseForge as a NeoForge 26.1.2 release.
 - [ ] Add the 1.0.0 changelog and verify the processed download.
 - [ ] Verify the public listing icon, license, description, categories, dependencies, file metadata, and download.
 - [ ] Create a signed or annotated `v1.0.0` Git tag only after the exact public artifact is confirmed.
+
+### Automated Release Validation — 2026-07-22
+
+- [x] Clean build completed and produced `resonance-1.0.0.jar`.
+- [x] All 385 packaged JSON resources parsed successfully.
+- [x] All 10 custom OGG files passed media validation.
+- [x] Release JAR contains required metadata, icon, sounds, biome, dimension, arena, recipe, loot, and advancement resources with no development directories packaged.
+- [x] Fresh dedicated-server startup loaded Resonance 1.0.0, 1,547 recipes, 1,631 advancements, and all three vanilla dimensions without errors.
+- [x] `resonance:crystallized_end` and `resonance:harmonic_arena` were located successfully in the fresh End world.
+- [x] Crystal Wraith, The Harmonic, and Crystal Rabbit survived a forced save, clean shutdown, and server restart.
+- [x] Client resource loading completed with all Resonance texture atlases and sound definitions present.
+- [x] Invalid vanilla amethyst sound references discovered during the client smoke test were corrected and revalidated.
+- [x] Final automated-test artifact SHA-256: `2B3D104C9F2EA70A2DCA91BAE48AAB9CFDFFD45FF79F900B193E681C2CDEAB82`.
 
 ---
 

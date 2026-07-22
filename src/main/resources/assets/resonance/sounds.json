@@ -2,7 +2,7 @@
   "resonance_chime": {
     "subtitle": "subtitles.resonance.chime",
     "sounds": [
-      "minecraft:block/amethyst/shimmer1"
+      "minecraft:block/amethyst/shimmer"
     ]
   },
   "resonance_pulse": {
@@ -14,13 +14,16 @@
   "harmonic_shield_absorb": {
     "subtitle": "subtitles.resonance.shield_absorb",
     "sounds": [
-      "minecraft:block/amethyst/resonate"
+      "minecraft:block/amethyst/resonate1",
+      "minecraft:block/amethyst/resonate2",
+      "minecraft:block/amethyst/resonate3",
+      "minecraft:block/amethyst/resonate4"
     ]
   },
   "harmonic_shield_recharge": {
     "subtitle": "subtitles.resonance.shield_recharge",
     "sounds": [
-      "minecraft:block/amethyst/chime"
+      "minecraft:block/amethyst/shimmer"
     ]
   },
   "stalker_laugh": {
