@@ -12,6 +12,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -27,6 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -149,10 +152,50 @@ public class ShatteredEchoEntity extends Monster {
                 && isNearAmethyst(level, pos);
     }
 
+    /**
+     * Vanilla hostile spawning excludes the 24-block radius around every
+     * player, which is larger than most geode interiors. This lightweight,
+     * capped encounter check lets an Echo appear while a player is actually
+     * exploring a geode without turning surrounding caves into Echo farms.
+     */
+    public static void trySpawnGeodeEncounter(ServerLevel level, Player player) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL || player.isSpectator()) return;
+        RandomSource random = level.getRandom();
+        if ((level.getGameTime() + player.getId()) % 100 != 0 || random.nextInt(4) != 0) return;
+
+        BlockPos playerPos = player.blockPosition();
+        if (!isNearAmethyst(level, playerPos, 10, 6)) return;
+        if (!level.getEntitiesOfClass(ShatteredEchoEntity.class,
+                new AABB(playerPos).inflate(24.0)).isEmpty()) return;
+
+        EntityType<ShatteredEchoEntity> type = com.resonance.registry.ModEntities.SHATTERED_ECHO.get();
+        for (int attempt = 0; attempt < 32; attempt++) {
+            BlockPos candidate = playerPos.offset(
+                    random.nextInt(21) - 10,
+                    random.nextInt(11) - 5,
+                    random.nextInt(21) - 10);
+            if (candidate.distSqr(playerPos) < 36.0
+                    || level.getBrightness(LightLayer.SKY, candidate) != 0
+                    || !isNearAmethyst(level, candidate)
+                    || !SpawnPlacements.isSpawnPositionOk(type, level, candidate)) {
+                continue;
+            }
+
+            ShatteredEchoEntity echo = type.spawn(level, candidate, EntitySpawnReason.NATURAL);
+            if (echo != null) return;
+        }
+    }
+
     private static boolean isNearAmethyst(ServerLevelAccessor level, BlockPos pos) {
+        return isNearAmethyst(level, pos, 6, 4);
+    }
+
+    private static boolean isNearAmethyst(ServerLevelAccessor level, BlockPos pos, int horizontalRadius, int verticalRadius) {
         boolean hasAmethyst = false;
         boolean hasShell = false;
-        for (BlockPos check : BlockPos.betweenClosed(pos.offset(-6, -4, -6), pos.offset(6, 4, 6))) {
+        for (BlockPos check : BlockPos.betweenClosed(
+                pos.offset(-horizontalRadius, -verticalRadius, -horizontalRadius),
+                pos.offset(horizontalRadius, verticalRadius, horizontalRadius))) {
             var state = level.getBlockState(check);
             if (state.is(Blocks.BUDDING_AMETHYST) || state.is(Blocks.AMETHYST_BLOCK)) {
                 hasAmethyst = true;

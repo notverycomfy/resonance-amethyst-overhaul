@@ -5,6 +5,7 @@ import com.resonance.Resonance;
 import com.resonance.data.HarmonizedFarmlandData;
 import com.resonance.data.ResonantPathData;
 import com.resonance.data.VibrationScars;
+import com.resonance.entity.ShatteredEchoEntity;
 import com.resonance.registry.ModEffects;
 import com.resonance.registry.ModItems;
 import com.resonance.registry.ModBlocks;
@@ -200,6 +201,8 @@ public class ResonanceEvents {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
         ServerLevel level = (ServerLevel) player.level();
+
+        ShatteredEchoEntity.trySpawnGeodeEncounter(level, player);
 
         // Shield cooldown tick
         UUID id = player.getUUID();

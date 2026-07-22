@@ -11,4 +11,5 @@
 - Corrected the Resonance chime and Harmonic shield cues to use valid vanilla amethyst sounds.
 - Unified Crystal Wraith emergence audio across spawn eggs and fracture summons, removed the remaining Warden cues, and increased the custom emergence sound's loudness.
 - Fixed Shattered Echo natural spawning inside geodes by allowing amethyst block light while continuing to require an underground, skylight-free geode environment.
+- Added a capped geode encounter spawn check so Shattered Echoes can appear while a player is exploring an interior smaller than vanilla's 24-block hostile-spawn exclusion radius.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
