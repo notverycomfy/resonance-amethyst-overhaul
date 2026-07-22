@@ -199,31 +199,6 @@ This roadmap records the actual state of the mod as of July 22, 2026. Completed 
 
 ---
 
-## Post-Release Priorities
-
-### 1.0.x — Stabilization
-
-- [ ] Monitor CurseForge comments and issue reports.
-- [ ] Fix reproducible crashes, broken tags, missing recipes, loot errors, and synchronization regressions.
-- [ ] Profile real multiplayer servers and large mature Crystal Forests.
-- [ ] Add automated regression coverage for recipes, loot tables, persistent world data, and encounter reloads.
-- [ ] Audit accessibility of particles, sound volumes, subtitles, contrast, and spoiler presentation.
-- [ ] Maintain compatibility across supported NeoForge 26.1.x updates.
-
-### Future Content Candidates
-
-These are ideas, not promises for a specific release.
-
-- [ ] Expand Frequency Relay beam and network visualization.
-- [ ] Explore a dedicated Resonant Shield if it adds gameplay distinct from the Harmonic Shield set bonus.
-- [ ] Explore a Harmonic enchantment system that complements rather than replaces existing tool abilities.
-- [ ] Expand geode archaeology, memories, and “Echoes of the Past” environmental storytelling.
-- [ ] Add more Crystal Forest ambient sounds and rare visual events.
-- [ ] Consider additional crystal wildlife only when it fills a clear biome role.
-- [ ] Add optional compatibility integrations based on player demand.
-
----
-
 ## Release Discipline
 
 - Keep `main` buildable.
