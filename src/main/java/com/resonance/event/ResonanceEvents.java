@@ -718,7 +718,7 @@ public class ResonanceEvents {
                 }
                 case 1 -> {
                     // Stage 1: Cracks burst open — explosion particles, block break effects
-                    level.playSound(null, e.center, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 0.8F, 0.3F);
+                    level.playSound(null, e.center, ModSounds.CRYSTAL_WRAITH_ARMOR_BREAK.get(), SoundSource.HOSTILE, 1.4F, 0.72F);
                     level.playSound(null, e.center, SoundEvents.GLASS_BREAK, SoundSource.HOSTILE, 1.5F, 0.6F);
                     for (BlockPos scar : e.scarPositions) {
                         double x = scar.getX() + 0.5, z = scar.getZ() + 0.5;
@@ -752,8 +752,8 @@ public class ResonanceEvents {
                     // Stage 2: Crystal Wraith rises from the center
                     double cx = e.center.getX() + 0.5, cz = e.center.getZ() + 0.5;
                     double cy = getScarGroundY(level, e.center);
-                    level.playSound(null, e.center, SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 1.5F, 1.2F);
-                    level.playSound(null, e.center, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.HOSTILE, 2.0F, 0.5F);
+                    // The entity plays its custom emergence cue on its first tick,
+                    // keeping fracture and spawn-egg Wraiths sonically consistent.
                     // Rising column of particles
                     for (int y = 0; y < 12; y++) {
                         level.sendParticles(brightPurple, cx, cy + y * 0.25, cz, 5, 0.3, 0.0, 0.3, 0.0);

@@ -9,4 +9,5 @@
 - Added Crystal Rabbit foods, Crystal Scutes, Resonant mount armor, loot integration, recipes, and advancements.
 - Added crystal dirt variants, farming support, tool interactions, particles, sounds, and vanilla creative-tab organization.
 - Corrected the Resonance chime and Harmonic shield cues to use valid vanilla amethyst sounds.
+- Unified Crystal Wraith emergence audio across spawn eggs and fracture summons, removed the remaining Warden cues, and increased the custom emergence sound's loudness.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
