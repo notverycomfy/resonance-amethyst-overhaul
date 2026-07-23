@@ -114,6 +114,9 @@ public final class ResonanceEvents {
             ItemStack armor = wolf.getItemBySlot(EquipmentSlot.BODY);
             if (armor.is(ModItems.RESONANT_WOLF_ARMOR.get())) {
                 armor.hurtAndBreak(Mth.ceil(amount), wolf, EquipmentSlot.BODY);
+                // Fabric cancels the hit to protect the wolf, so explicitly sync
+                // the vanilla damage interaction that NeoForge retains at 0 damage.
+                level.broadcastDamageEvent(wolf, source);
                 return false;
             }
         }
