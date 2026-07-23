@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "has_raw_crystal_rabbit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "resonance:raw_crystal_rabbit"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_crystal_rabbit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:cooked_crystal_rabbit",
+      "resonance:cooked_crystal_rabbit_from_campfire_cooking",
+      "resonance:cooked_crystal_rabbit_from_smoking"
+    ]
+  }
+}

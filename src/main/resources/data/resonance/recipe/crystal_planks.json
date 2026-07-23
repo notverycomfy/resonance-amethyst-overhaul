@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "building",
-  "group": "planks",
   "ingredients": [
     "#resonance:crystal_logs"
   ],

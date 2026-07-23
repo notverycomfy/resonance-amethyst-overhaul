@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "has_cooked_crystal_rabbit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "resonance:cooked_crystal_rabbit"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cooked_crystal_rabbit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:crystal_rabbit_stew"
+    ]
+  }
+}

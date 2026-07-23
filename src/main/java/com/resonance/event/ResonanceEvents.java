@@ -68,6 +68,7 @@ public final class ResonanceEvents {
     private static final Map<UUID, Float> PATH_SPEED_BONUS = new HashMap<>();
     private static final Set<Integer> RECENTLY_RESONANT = new HashSet<>();
     private static final Set<Integer> REAPPLYING_DAMAGE = new HashSet<>();
+    private static final Set<Integer> BONUS_PENDING = new HashSet<>();
     private static final float MAX_PATH_SPEED = 0.20F;
 
     private ResonanceEvents() {
@@ -75,6 +76,7 @@ public final class ResonanceEvents {
 
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(ResonanceEvents::beforeDamage);
+        ServerLivingEntityEvents.AFTER_DAMAGE.register(ResonanceEvents::afterDamage);
         ServerLivingEntityEvents.AFTER_DEATH.register(ResonanceEvents::afterDeath);
         ServerTickEvents.END_LEVEL_TICK.register(ResonanceEvents::levelTick);
         PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) ->
@@ -86,15 +88,11 @@ public final class ResonanceEvents {
         if (!(target.level() instanceof ServerLevel level)) {
             return true;
         }
-
-        Player attacker = source.getEntity() instanceof Player player ? player : null;
-        if (attacker != null && source.getDirectEntity() == attacker
-                && attacker.getMainHandItem().is(ModItems.RESONANT_SWORD.get())) {
-            target.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
-            RECENTLY_RESONANT.add(target.getId());
-            level.playSound(null, target.blockPosition(), ModSounds.RESONANCE_CHIME.get(), SoundSource.PLAYERS, 0.8F, 1.3F);
+        if (REAPPLYING_DAMAGE.contains(target.getId())) {
+            return true;
         }
 
+        Player attacker = source.getEntity() instanceof Player player ? player : null;
         if (target instanceof ServerPlayer player
                 && !source.is(net.minecraft.world.damagesource.DamageTypes.FALL)
                 && hasFullResonantArmor(player)
@@ -126,18 +124,64 @@ public final class ResonanceEvents {
         }
 
         MobEffectInstance resonance = target.getEffect(ModEffects.RESONANCE);
-        if (resonance != null && REAPPLYING_DAMAGE.add(target.getId())) {
+        if (resonance != null) {
             RECENTLY_RESONANT.add(target.getId());
-            float multiplier = 1.0F + (float) (Config.RESONANCE_DAMAGE_BONUS.getAsDouble()
-                    * (resonance.getAmplifier() + 1));
-            try {
-                target.hurtServer(level, source, amount * multiplier);
-            } finally {
-                REAPPLYING_DAMAGE.remove(target.getId());
+            BONUS_PENDING.add(target.getId());
+            if (attacker != null && level.getRandom().nextFloat() < 0.02F) {
+                trySpawnStalker(level, target.blockPosition());
             }
-            return false;
+        }
+
+        // Apply Resonance after checking the existing effect so the first sword
+        // hit marks its target without also receiving the follow-up bonus.
+        if (attacker != null && source.getDirectEntity() == attacker
+                && attacker.getMainHandItem().is(ModItems.RESONANT_SWORD.get())) {
+            target.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
+            RECENTLY_RESONANT.add(target.getId());
+            level.playSound(null, target.blockPosition(), ModSounds.RESONANCE_CHIME.get(), SoundSource.PLAYERS, 0.8F, 1.3F);
         }
         return true;
+    }
+
+    private static void afterDamage(LivingEntity target, net.minecraft.world.damagesource.DamageSource source,
+                                    float damageTaken, float damageBlocked, boolean blocked) {
+        boolean bonusPending = BONUS_PENDING.remove(target.getId());
+        if (!(target.level() instanceof ServerLevel level) || blocked || damageTaken <= 0.0F
+                || REAPPLYING_DAMAGE.contains(target.getId()) || !bonusPending) {
+            return;
+        }
+        MobEffectInstance resonance = target.getEffect(ModEffects.RESONANCE);
+        if (resonance == null || !REAPPLYING_DAMAGE.add(target.getId())) {
+            return;
+        }
+        float bonus = damageTaken * (float) (Config.RESONANCE_DAMAGE_BONUS.getAsDouble()
+                * (resonance.getAmplifier() + 1));
+        try {
+            target.hurtServer(level, source, bonus);
+        } finally {
+            REAPPLYING_DAMAGE.remove(target.getId());
+        }
+    }
+
+    private static void trySpawnStalker(ServerLevel level, BlockPos origin) {
+        for (int attempt = 0; attempt < 10; attempt++) {
+            BlockPos candidate = origin.offset(
+                    level.getRandom().nextIntBetweenInclusive(-8, 8), 0,
+                    level.getRandom().nextIntBetweenInclusive(-8, 8));
+            BlockPos spawnPos = level.getHeightmapPos(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, candidate);
+            if (spawnPos.distSqr(origin) <= 9.0) {
+                continue;
+            }
+            var stalker = ModEntities.RESONANT_STALKER.get().create(
+                    level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            if (stalker != null) {
+                stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+                stalker.setYRot(level.getRandom().nextFloat() * 360.0F);
+                level.addFreshEntity(stalker);
+            }
+            return;
+        }
     }
 
     private static void afterDeath(LivingEntity dead, net.minecraft.world.damagesource.DamageSource source) {
