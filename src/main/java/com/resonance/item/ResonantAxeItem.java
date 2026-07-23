@@ -54,9 +54,10 @@ public class ResonantAxeItem extends AxeItem {
         AABB area = target.getBoundingBox().inflate(3.0);
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != attacker && e != target)) {
             mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
-            mob.hurtServer(level, level.damageSources().mobAttack(attacker), 1.0F);
+            var shockwaveSource = level.damageSources().mobAttack(attacker);
+            mob.hurtServer(level, shockwaveSource, 1.0F);
             Vec3 knockback = mob.position().subtract(target.position()).normalize();
-            mob.knockback(0.8, knockback.x, knockback.z);
+            mob.knockback(0.8, knockback.x, knockback.z, shockwaveSource, 1.0F);
         }
     }
 }

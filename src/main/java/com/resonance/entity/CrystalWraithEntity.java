@@ -206,9 +206,10 @@ public class CrystalWraithEntity extends Monster {
         // Damage + knockback everything nearby
         AABB area = getBoundingBox().inflate(3.5);
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != this)) {
-            mob.hurtServer(level, level.damageSources().mobAttack(this), 6.0F);
+            var slamSource = level.damageSources().mobAttack(this);
+            mob.hurtServer(level, slamSource, 6.0F);
             Vec3 knockDir = mob.position().subtract(this.position()).normalize();
-            mob.knockback(1.8, -knockDir.x, -knockDir.z);
+            mob.knockback(1.8, -knockDir.x, -knockDir.z, slamSource, 6.0F);
             mob.push(0, 0.4, 0);
         }
     }

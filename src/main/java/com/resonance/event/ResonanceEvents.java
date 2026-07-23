@@ -170,9 +170,10 @@ public class ResonanceEvents {
                 AABB area = player.getBoundingBox().inflate(5.0);
                 for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player)) {
                     mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), player);
-                    mob.hurtServer(level, level.damageSources().mobAttack(player), 1.0F);
+                    var counterSource = level.damageSources().mobAttack(player);
+                    mob.hurtServer(level, counterSource, 1.0F);
                     Vec3 knockbackDir = mob.position().subtract(player.position()).normalize();
-                    mob.knockback(1.5, knockbackDir.x, knockbackDir.z);
+                    mob.knockback(1.5, knockbackDir.x, knockbackDir.z, counterSource, 1.0F);
                 }
             }
         }
