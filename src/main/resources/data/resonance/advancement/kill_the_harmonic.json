@@ -16,7 +16,7 @@
           {
             "condition": "minecraft:entity_properties",
             "entity": "this",
-            "predicate": { "type": "resonance:the_harmonic" }
+            "predicate": { "minecraft:entity_type": "resonance:the_harmonic" }
           }
         ]
       }
