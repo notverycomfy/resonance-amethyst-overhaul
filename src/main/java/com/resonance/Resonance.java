@@ -16,6 +16,7 @@ import com.resonance.registry.ModStructures;
 import com.resonance.registry.ModWorldGen;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTabOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -54,8 +55,18 @@ public final class Resonance implements ModInitializer {
     }
 
     private static void addAfter(ResourceKey<CreativeModeTab> tab, ItemLike anchor, ItemLike... entries) {
-        CreativeModeTabEvents.modifyOutputEvent(tab).register(output ->
-                output.insertAfter(anchor, Arrays.stream(entries).map(ItemStack::new).toList()));
+        CreativeModeTabEvents.modifyOutputEvent(tab).register(output -> {
+            var stacks = Arrays.stream(entries).map(ItemStack::new).toList();
+            removeExisting(output, entries);
+            output.insertAfter(anchor, stacks);
+        });
+    }
+
+    private static void removeExisting(FabricCreativeModeTabOutput output, ItemLike... entries) {
+        output.getDisplayStacks().removeIf(stack ->
+                Arrays.stream(entries).anyMatch(entry -> stack.is(entry.asItem())));
+        output.getSearchTabStacks().removeIf(stack ->
+                Arrays.stream(entries).anyMatch(entry -> stack.is(entry.asItem())));
     }
 
     private static void registerCreativeTabs() {
