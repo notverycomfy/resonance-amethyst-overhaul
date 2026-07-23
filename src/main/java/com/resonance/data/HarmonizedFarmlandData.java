@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.util.datafix.DataFixTypes;
 
 public class HarmonizedFarmlandData extends SavedData {
 
@@ -29,7 +30,8 @@ public class HarmonizedFarmlandData extends SavedData {
     public static final SavedDataType<HarmonizedFarmlandData> TYPE = new SavedDataType<>(
             Identifier.fromNamespaceAndPath("resonance", "harmonized_farmland"),
             HarmonizedFarmlandData::new,
-            CODEC
+            CODEC,
+            DataFixTypes.LEVEL
     );
 
     public HarmonizedFarmlandData() {

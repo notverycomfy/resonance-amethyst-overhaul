@@ -37,8 +37,11 @@ public class CrystalFarmlandBlock extends FarmlandBlock {
 
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double distance) {
-        if (level instanceof ServerLevel server && net.neoforged.neoforge.common.CommonHooks.onFarmlandTrample(
-                server, pos, ModBlocks.CRYSTAL_DIRT.get().defaultBlockState(), distance, entity)) {
+        if (level instanceof ServerLevel
+                && distance > 0.5D
+                && entity instanceof net.minecraft.world.entity.LivingEntity
+                && (entity instanceof net.minecraft.world.entity.player.Player
+                    || ((ServerLevel) level).getGameRules().get(net.minecraft.world.level.gamerules.GameRules.MOB_GRIEFING))) {
             turnToCrystalDirt(entity, state, level, pos);
         }
         super.fallOn(level, state, pos, entity, 0.0);

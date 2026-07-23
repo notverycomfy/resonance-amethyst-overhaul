@@ -1,8 +1,11 @@
 {
   "required": true,
   "package": "com.resonance.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "CropBlockMixin",
+    "LivingEntityMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

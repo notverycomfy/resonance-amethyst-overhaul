@@ -19,7 +19,7 @@ public class DeferredRegister<T> {
 
     @SuppressWarnings("unchecked")
     protected DeferredRegister(ResourceKey<? extends Registry<T>> registryKey, String namespace) {
-        this.registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(registryKey.location());
+        this.registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(registryKey.identifier());
         this.namespace = namespace;
     }
 

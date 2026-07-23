@@ -33,6 +33,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.trunkplacers.CherryTrunkPlacer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.util.datafix.DataFixTypes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,7 +78,8 @@ public class CrystalForestSpreadData extends SavedData {
     public static final SavedDataType<CrystalForestSpreadData> TYPE = new SavedDataType<>(
             Identifier.fromNamespaceAndPath("resonance", "crystal_forest_spread"),
             CrystalForestSpreadData::new,
-            CODEC
+            CODEC,
+            DataFixTypes.LEVEL
     );
 
     public CrystalForestSpreadData() {

@@ -1,19 +1,13 @@
 package com.resonance.event;
 
-import com.resonance.Resonance;
 import com.resonance.data.CrystalForestSpreadData;
-import net.minecraft.server.level.ServerLevel;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
-@EventBusSubscriber(modid = Resonance.MODID)
-public class CrystalForestEvents {
+public final class CrystalForestEvents {
+    private CrystalForestEvents() {
+    }
 
-    @SubscribeEvent
-    public static void onLevelTick(LevelTickEvent.Post event) {
-        if (event.getLevel() instanceof ServerLevel serverLevel) {
-            CrystalForestSpreadData.get(serverLevel).tick(serverLevel);
-        }
+    public static void register() {
+        ServerTickEvents.END_LEVEL_TICK.register(level -> CrystalForestSpreadData.get(level).tick(level));
     }
 }

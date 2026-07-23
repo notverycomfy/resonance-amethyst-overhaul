@@ -1,68 +1,62 @@
 package com.resonance.client;
 
-import com.resonance.Resonance;
 import com.resonance.client.model.CrystalWraithModel;
 import com.resonance.client.model.ShatteredEchoModel;
 import com.resonance.client.model.TheHarmonicModel;
-import com.resonance.entity.TheHarmonicEntity;
+import com.resonance.registry.ModBlockEntities;
 import com.resonance.registry.ModEntities;
-import net.minecraft.client.Minecraft;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import com.resonance.entity.TheHarmonicEntity;
+import net.minecraft.sounds.Musics;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.sounds.Musics;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.SelectMusicEvent;
 
-@EventBusSubscriber(modid = Resonance.MODID, value = Dist.CLIENT)
-public class ClientEvents {
+public final class ClientEvents {
+    private ClientEvents() {
+    }
 
-    private static final double HARMONIC_MUSIC_RANGE_SQR = 128.0 * 128.0;
+    public static void register() {
+        EntityRendererRegistry.register(ModEntities.RESONANT_ARROW.get(), ResonantArrowRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SHATTERED_ECHO.get(), ShatteredEchoRenderer::new);
+        EntityRendererRegistry.register(ModEntities.RESONANT_STALKER.get(), ResonantStalkerRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRYSTAL_WRAITH.get(), CrystalWraithRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRYSTAL_SENTINEL.get(), CrystalSentinelRenderer::new);
+        EntityRendererRegistry.register(ModEntities.THE_HARMONIC.get(), TheHarmonicRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRYSTAL_SHARD.get(), CrystalShardRenderer::new);
+        EntityRendererRegistry.register(ModEntities.HARMONIC_ANCHOR.get(), HarmonicAnchorRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRYSTAL_RABBIT.get(), CrystalRabbitRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRYSTAL_ARMADILLO.get(), CrystalArmadilloRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.CHORUS_RESONATOR.get(), ChorusResonatorRenderer::new);
 
-    @SubscribeEvent
-    public static void selectBossMusic(SelectMusicEvent event) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null || minecraft.player == null) {
-            return;
-        }
+        ModelLayerRegistry.registerModelLayer(ShatteredEchoRenderer.LAYER, ShatteredEchoModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ResonantStalkerRenderer.LAYER,
+                () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
+        ModelLayerRegistry.registerModelLayer(CrystalWraithRenderer.LAYER, CrystalWraithModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(TheHarmonicRenderer.LAYER, TheHarmonicModel::createBodyLayer);
 
-        for (var entity : minecraft.level.entitiesForRendering()) {
-            if (entity instanceof TheHarmonicEntity boss
-                    && boss.isAlive()
-                    && boss.distanceToSqr(minecraft.player) <= HARMONIC_MUSIC_RANGE_SQR) {
-                // Uses Minecraft's dedicated boss score through the Music
-                // channel, replacing ambient music immediately and ending
-                // automatically once the encounter is no longer present.
-                event.overrideMusic(Musics.END_BOSS);
+        ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
+            if (minecraft.level == null || minecraft.player == null) {
                 return;
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntities.RESONANT_ARROW.get(), ResonantArrowRenderer::new);
-        event.registerEntityRenderer(ModEntities.SHATTERED_ECHO.get(), ShatteredEchoRenderer::new);
-        event.registerEntityRenderer(ModEntities.RESONANT_STALKER.get(), ResonantStalkerRenderer::new);
-        event.registerEntityRenderer(ModEntities.CRYSTAL_WRAITH.get(), CrystalWraithRenderer::new);
-        event.registerEntityRenderer(ModEntities.CRYSTAL_SENTINEL.get(), CrystalSentinelRenderer::new);
-        event.registerEntityRenderer(ModEntities.THE_HARMONIC.get(), TheHarmonicRenderer::new);
-        event.registerEntityRenderer(ModEntities.CRYSTAL_SHARD.get(), CrystalShardRenderer::new);
-        event.registerEntityRenderer(ModEntities.HARMONIC_ANCHOR.get(), HarmonicAnchorRenderer::new);
-        event.registerBlockEntityRenderer(com.resonance.registry.ModBlockEntities.CHORUS_RESONATOR.get(), ChorusResonatorRenderer::new);
-        event.registerEntityRenderer(ModEntities.CRYSTAL_RABBIT.get(), CrystalRabbitRenderer::new);
-        event.registerEntityRenderer(ModEntities.CRYSTAL_ARMADILLO.get(), CrystalArmadilloRenderer::new);
-    }
-
-    @SubscribeEvent
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(ShatteredEchoRenderer.LAYER, ShatteredEchoModel::createBodyLayer);
-        event.registerLayerDefinition(ResonantStalkerRenderer.LAYER,
-                () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0F), 64, 64));
-        event.registerLayerDefinition(CrystalWraithRenderer.LAYER, CrystalWraithModel::createBodyLayer);
-        event.registerLayerDefinition(TheHarmonicRenderer.LAYER, TheHarmonicModel::createBodyLayer);
+            boolean harmonicNearby = false;
+            for (var entity : minecraft.level.entitiesForRendering()) {
+                if (entity instanceof TheHarmonicEntity boss && boss.isAlive()
+                        && boss.distanceToSqr(minecraft.player) <= 128.0 * 128.0) {
+                    harmonicNearby = true;
+                    break;
+                }
+            }
+            if (harmonicNearby) {
+                if (!minecraft.getMusicManager().isPlayingMusic(Musics.END_BOSS)) {
+                    minecraft.getMusicManager().startPlaying(Musics.END_BOSS);
+                }
+            } else if (minecraft.getMusicManager().isPlayingMusic(Musics.END_BOSS)) {
+                minecraft.getMusicManager().stopPlaying(Musics.END_BOSS);
+            }
+        });
     }
 }

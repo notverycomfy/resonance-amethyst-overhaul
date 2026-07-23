@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import com.resonance.fabric.registry.DeferredHolder;
 import com.resonance.fabric.registry.DeferredRegister;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
@@ -15,13 +16,16 @@ public class ModBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResonantLanternBlockEntity>> RESONANT_LANTERN =
             BLOCK_ENTITIES.register("resonant_lantern", () ->
-                    new BlockEntityType<>(ResonantLanternBlockEntity::new, ModBlocks.RESONANT_LANTERN.get()));
+                    FabricBlockEntityTypeBuilder.create(ResonantLanternBlockEntity::new,
+                            ModBlocks.RESONANT_LANTERN.get()).build());
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FrequencyRelayBlockEntity>> FREQUENCY_RELAY =
             BLOCK_ENTITIES.register("frequency_relay", () ->
-                    new BlockEntityType<>(FrequencyRelayBlockEntity::new, ModBlocks.FREQUENCY_RELAY.get()));
+                    FabricBlockEntityTypeBuilder.create(FrequencyRelayBlockEntity::new,
+                            ModBlocks.FREQUENCY_RELAY.get()).build());
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChorusResonatorBlockEntity>> CHORUS_RESONATOR =
             BLOCK_ENTITIES.register("chorus_resonator", () ->
-                    new BlockEntityType<>(ChorusResonatorBlockEntity::new, ModBlocks.CHORUS_RESONATOR.get()));
+                    FabricBlockEntityTypeBuilder.create(ChorusResonatorBlockEntity::new,
+                            ModBlocks.CHORUS_RESONATOR.get()).build());
 }

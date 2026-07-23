@@ -38,7 +38,7 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Resonance.MODID);
 
     /** Crystal controls keep the wooden behavior while using one sound palette. */
-    private static final BlockSetType CRYSTAL_BLOCK_SET = BlockSetType.register(new BlockSetType(
+    private static final BlockSetType CRYSTAL_BLOCK_SET = new BlockSetType(
             "resonance:crystal",
             true,
             true,
@@ -52,15 +52,15 @@ public class ModBlocks {
             SoundType.AMETHYST.getHitSound(),
             SoundType.AMETHYST.getPlaceSound(),
             SoundType.AMETHYST.getHitSound(),
-            SoundType.AMETHYST.getPlaceSound()));
+            SoundType.AMETHYST.getPlaceSound());
 
-    private static final WoodType CRYSTAL_WOOD_TYPE = WoodType.register(new WoodType(
+    private static final WoodType CRYSTAL_WOOD_TYPE = new WoodType(
             "resonance:crystal",
             CRYSTAL_BLOCK_SET,
             SoundType.AMETHYST,
             SoundType.AMETHYST,
             SoundType.AMETHYST.getBreakSound(),
-            SoundType.AMETHYST.getPlaceSound()));
+            SoundType.AMETHYST.getPlaceSound());
 
     public static final DeferredBlock<Block> RESONANT_LANTERN = BLOCKS.registerBlock("resonant_lantern",
             ResonantLanternBlock::new,

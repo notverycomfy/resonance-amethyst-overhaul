@@ -1,25 +1,35 @@
 package com.resonance;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+/**
+ * Loader-neutral configuration values for the Fabric builds.
+ *
+ * Fabric keeps the same balanced defaults as NeoForge. A future config-screen
+ * integration can persist overrides without changing gameplay call sites.
+ */
+public final class Config {
+    public static final DoubleValue RESONANCE_DAMAGE_BONUS = new DoubleValue(0.2);
+    public static final IntValue RESONANCE_DURATION = new IntValue(100);
+    public static final IntValue HARMONIC_SHIELD_COOLDOWN = new IntValue(600);
+    public static final BooleanValue SHOW_PARTICLES = new BooleanValue(true);
 
-public class Config {
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private Config() {
+    }
 
-    public static final ModConfigSpec.DoubleValue RESONANCE_DAMAGE_BONUS = BUILDER
-            .comment("Extra damage multiplier per Resonance amplifier level (0.2 = +20% damage taken).")
-            .defineInRange("resonanceDamageBonus", 0.2, 0.0, 2.0);
+    public record DoubleValue(double value) {
+        public double getAsDouble() {
+            return value;
+        }
+    }
 
-    public static final ModConfigSpec.IntValue RESONANCE_DURATION = BUILDER
-            .comment("Duration of the Resonance effect in ticks (100 = 5 seconds).")
-            .defineInRange("resonanceDuration", 100, 20, 600);
+    public record IntValue(int value) {
+        public int getAsInt() {
+            return value;
+        }
+    }
 
-    public static final ModConfigSpec.IntValue HARMONIC_SHIELD_COOLDOWN = BUILDER
-            .comment("Cooldown in ticks for Harmonic Shield regeneration (600 = 30 seconds).")
-            .defineInRange("harmonicShieldCooldown", 600, 100, 2400);
-
-    public static final ModConfigSpec.BooleanValue SHOW_PARTICLES = BUILDER
-            .comment("Whether to show particles on entities afflicted with Resonance.")
-            .define("showParticles", true);
-
-    static final ModConfigSpec SPEC = BUILDER.build();
+    public record BooleanValue(boolean value) {
+        public boolean getAsBoolean() {
+            return value;
+        }
+    }
 }

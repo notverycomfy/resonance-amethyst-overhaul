@@ -1,6 +1,9 @@
 package com.resonance;
 
+import com.resonance.event.BrewingRecipeHandler;
+import com.resonance.event.CrystalForestEvents;
 import com.resonance.event.ModBusEvents;
+import com.resonance.event.ResonanceEvents;
 import com.resonance.registry.ModBlockEntities;
 import com.resonance.registry.ModBlocks;
 import com.resonance.registry.ModEffects;
@@ -11,122 +14,90 @@ import com.resonance.registry.ModPotions;
 import com.resonance.registry.ModSounds;
 import com.resonance.registry.ModStructures;
 import com.resonance.registry.ModWorldGen;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.registries.DeferredItem;
+import net.minecraft.world.level.ItemLike;
 
-@Mod(Resonance.MODID)
-public class Resonance {
+import java.util.Arrays;
+
+public final class Resonance implements ModInitializer {
     public static final String MODID = "resonance";
 
-    public Resonance(IEventBus modEventBus, ModContainer modContainer) {
-        // Force ModBlocks to load (registers block items on ModItems.ITEMS)
-        ModBlocks.BLOCKS.register(modEventBus);
-        ModItems.ITEMS.register(modEventBus);
-        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-        ModEffects.MOB_EFFECTS.register(modEventBus);
-        ModEntities.ENTITY_TYPES.register(modEventBus);
-        ModSounds.SOUND_EVENTS.register(modEventBus);
-        ModLootModifiers.LOOT_MODIFIERS.register(modEventBus);
-        ModPotions.POTIONS.register(modEventBus);
-        ModWorldGen.BIOME_SOURCES.register(modEventBus);
-        ModWorldGen.FEATURES.register(modEventBus);
-        ModStructures.STRUCTURE_TYPES.register(modEventBus);
-        ModStructures.STRUCTURE_PIECE_TYPES.register(modEventBus);
-
-        ModBusEvents.register(modEventBus);
-        modEventBus.addListener(this::addCreative);
-
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    @Override
+    public void onInitialize() {
+        bootstrapRegistries();
+        ModBusEvents.register();
+        ResonanceEvents.register();
+        CrystalForestEvents.register();
+        BrewingRecipeHandler.register();
+        ModLootModifiers.register();
+        registerCreativeTabs();
     }
 
-    private static void place(BuildCreativeModeTabContentsEvent event, ItemStack after, DeferredItem<?> item) {
-        var vis = CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
-        var stack = item.toStack();
-        // Remove if auto-added by vanilla, then re-insert in the correct position
-        event.remove(stack, vis);
-        event.insertAfter(after, stack, vis);
+    private static void bootstrapRegistries() {
+        // Fabric registrations are immediate; touching each holder class performs
+        // registration in dependency order before events and data packs load.
+        ModBlocks.CRYSTAL_LOG.get();
+        ModItems.AMETHYST_INGOT.get();
+        ModBlockEntities.CHORUS_RESONATOR.get();
+        ModEffects.RESONANCE.get();
+        ModEntities.SHATTERED_ECHO.get();
+        ModSounds.RESONANCE_CHIME.get();
+        ModPotions.RESONANCE.get();
+        ModWorldGen.AMETHYST_SPIRE.get();
+        ModStructures.HARMONIC_ARENA_TYPE.get();
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
-            place(event, new ItemStack(Items.RABBIT), ModItems.RAW_CRYSTAL_RABBIT);
-            place(event, new ItemStack(Items.COOKED_RABBIT), ModItems.COOKED_CRYSTAL_RABBIT);
-            place(event, new ItemStack(Items.RABBIT_STEW), ModItems.CRYSTAL_RABBIT_STEW);
-        } else if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            place(event, new ItemStack(Items.AMETHYST_SHARD), ModItems.AMETHYST_INGOT);
-            place(event, ModItems.AMETHYST_INGOT.toStack(), ModItems.HARMONIC_FRAGMENT);
-            place(event, ModItems.HARMONIC_FRAGMENT.toStack(), ModItems.WHISPER_FRAGMENT);
-            place(event, ModItems.WHISPER_FRAGMENT.toStack(), ModItems.CRYSTAL_FRAGMENT);
-            place(event, new ItemStack(Items.ARMADILLO_SCUTE), ModItems.CRYSTAL_SCUTE);
-        } else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            place(event, new ItemStack(Items.ARMADILLO_SPAWN_EGG), ModItems.CRYSTAL_ARMADILLO_SPAWN_EGG);
-            place(event, new ItemStack(Items.RABBIT_SPAWN_EGG), ModItems.CRYSTAL_RABBIT_SPAWN_EGG);
-            place(event, new ItemStack(Items.SKELETON_SPAWN_EGG), ModItems.SHATTERED_ECHO_SPAWN_EGG);
-            place(event, new ItemStack(Items.PHANTOM_SPAWN_EGG), ModItems.CRYSTAL_WRAITH_SPAWN_EGG);
-            place(event, new ItemStack(Items.ENDERMAN_SPAWN_EGG), ModItems.RESONANT_STALKER_SPAWN_EGG);
-            place(event, new ItemStack(Items.SHULKER_SPAWN_EGG), ModItems.CRYSTAL_SENTINEL_SPAWN_EGG);
-        } else if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            // Keep the complete crystal family together, between cherry and pale oak.
-            place(event, new ItemStack(Items.CHERRY_BUTTON), ModBlocks.CRYSTAL_LOG_ITEM);
-            place(event, ModBlocks.CRYSTAL_LOG_ITEM.toStack(), ModBlocks.CRYSTAL_WOOD_ITEM);
-            place(event, ModBlocks.CRYSTAL_WOOD_ITEM.toStack(), ModBlocks.STRIPPED_CRYSTAL_LOG_ITEM);
-            place(event, ModBlocks.STRIPPED_CRYSTAL_LOG_ITEM.toStack(), ModBlocks.STRIPPED_CRYSTAL_WOOD_ITEM);
-            place(event, ModBlocks.STRIPPED_CRYSTAL_WOOD_ITEM.toStack(), ModBlocks.CRYSTAL_PLANKS_ITEM);
-            place(event, ModBlocks.CRYSTAL_PLANKS_ITEM.toStack(), ModBlocks.CRYSTAL_STAIRS_ITEM);
-            place(event, ModBlocks.CRYSTAL_STAIRS_ITEM.toStack(), ModBlocks.CRYSTAL_SLAB_ITEM);
-            place(event, ModBlocks.CRYSTAL_SLAB_ITEM.toStack(), ModBlocks.CRYSTAL_FENCE_ITEM);
-            place(event, ModBlocks.CRYSTAL_FENCE_ITEM.toStack(), ModBlocks.CRYSTAL_FENCE_GATE_ITEM);
-            place(event, ModBlocks.CRYSTAL_FENCE_GATE_ITEM.toStack(), ModBlocks.CRYSTAL_DOOR_ITEM);
-            place(event, ModBlocks.CRYSTAL_DOOR_ITEM.toStack(), ModBlocks.CRYSTAL_TRAPDOOR_ITEM);
-            place(event, ModBlocks.CRYSTAL_TRAPDOOR_ITEM.toStack(), ModBlocks.CRYSTAL_PRESSURE_PLATE_ITEM);
-            place(event, ModBlocks.CRYSTAL_PRESSURE_PLATE_ITEM.toStack(), ModBlocks.CRYSTAL_BUTTON_ITEM);
-        } else if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
-            place(event, new ItemStack(Items.GRASS_BLOCK), ModBlocks.CRYSTAL_GRASS_BLOCK_ITEM);
-            place(event, ModBlocks.CRYSTAL_GRASS_BLOCK_ITEM.toStack(), ModBlocks.CRYSTAL_DIRT_ITEM);
-            place(event, ModBlocks.CRYSTAL_DIRT_ITEM.toStack(), ModBlocks.COARSE_CRYSTAL_DIRT_ITEM);
-            place(event, ModBlocks.COARSE_CRYSTAL_DIRT_ITEM.toStack(), ModBlocks.ROOTED_CRYSTAL_DIRT_ITEM);
-            place(event, ModBlocks.ROOTED_CRYSTAL_DIRT_ITEM.toStack(), ModBlocks.CRYSTAL_DIRT_PATH_ITEM);
-            place(event, ModBlocks.CRYSTAL_DIRT_PATH_ITEM.toStack(), ModBlocks.CRYSTAL_FARMLAND_ITEM);
-            place(event, new ItemStack(Items.CHERRY_LOG), ModBlocks.CRYSTAL_LOG_ITEM);
-            place(event, new ItemStack(Items.CHERRY_LEAVES), ModBlocks.CRYSTAL_LEAVES_ITEM);
-            place(event, new ItemStack(Items.SHORT_GRASS), ModBlocks.CRYSTAL_GRASS_ITEM);
-            place(event, new ItemStack(Items.ALLIUM), ModBlocks.CRYSTAL_BLOOM_ITEM);
-            place(event, ModBlocks.CRYSTAL_BLOOM_ITEM.toStack(), ModBlocks.SHARD_BLOSSOM_ITEM);
-        } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-            place(event, new ItemStack(Items.SPECTRAL_ARROW), ModItems.RESONANT_ARROW);
-            place(event, new ItemStack(Items.IRON_SWORD), ModItems.RESONANT_SWORD);
-            place(event, new ItemStack(Items.IRON_SPEAR), ModItems.RESONANT_SPEAR);
-            place(event, new ItemStack(Items.IRON_AXE), ModItems.RESONANT_AXE);
-            place(event, new ItemStack(Items.IRON_BOOTS), ModItems.RESONANT_HELMET);
-            place(event, ModItems.RESONANT_HELMET.toStack(), ModItems.RESONANT_CHESTPLATE);
-            place(event, ModItems.RESONANT_CHESTPLATE.toStack(), ModItems.RESONANT_LEGGINGS);
-            place(event, ModItems.RESONANT_LEGGINGS.toStack(), ModItems.RESONANT_BOOTS);
-            place(event, new ItemStack(Items.IRON_HORSE_ARMOR), ModItems.RESONANT_HORSE_ARMOR);
-            place(event, new ItemStack(Items.WOLF_ARMOR), ModItems.RESONANT_WOLF_ARMOR);
-            place(event, new ItemStack(Items.IRON_NAUTILUS_ARMOR), ModItems.RESONANT_NAUTILUS_ARMOR);
-        } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            place(event, new ItemStack(Items.IRON_HOE), ModItems.RESONANT_SHOVEL);
-            place(event, ModItems.RESONANT_SHOVEL.toStack(), ModItems.RESONANT_PICKAXE);
-            place(event, ModItems.RESONANT_PICKAXE.toStack(), ModItems.RESONANT_AXE);
-            place(event, ModItems.RESONANT_AXE.toStack(), ModItems.RESONANT_HOE);
-        } else if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-            place(event, new ItemStack(Items.SOUL_LANTERN), ModBlocks.RESONANT_LANTERN_ITEM);
-        } else if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
-            place(event, new ItemStack(Items.DAYLIGHT_DETECTOR), ModBlocks.FREQUENCY_RELAY_ITEM);
-        }
+    private static void addAfter(ResourceKey<CreativeModeTab> tab, ItemLike anchor, ItemLike... entries) {
+        CreativeModeTabEvents.modifyOutputEvent(tab).register(output ->
+                output.insertAfter(anchor, Arrays.stream(entries).map(ItemStack::new).toList()));
+    }
 
-        // Add totem to combat tab
-        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-            place(event, new ItemStack(Items.TOTEM_OF_UNDYING), ModItems.RESONANT_TOTEM);
-        }
-
+    private static void registerCreativeTabs() {
+        addAfter(CreativeModeTabs.FOOD_AND_DRINKS, Items.RABBIT,
+                ModItems.RAW_CRYSTAL_RABBIT.get(), ModItems.COOKED_CRYSTAL_RABBIT.get(),
+                ModItems.CRYSTAL_RABBIT_STEW.get());
+        addAfter(CreativeModeTabs.INGREDIENTS, Items.AMETHYST_SHARD,
+                ModItems.AMETHYST_INGOT.get(), ModItems.HARMONIC_FRAGMENT.get(),
+                ModItems.WHISPER_FRAGMENT.get(), ModItems.CRYSTAL_FRAGMENT.get(),
+                ModItems.CRYSTAL_SCUTE.get());
+        addAfter(CreativeModeTabs.SPAWN_EGGS, Items.ARMADILLO_SPAWN_EGG,
+                ModItems.CRYSTAL_ARMADILLO_SPAWN_EGG.get(), ModItems.CRYSTAL_RABBIT_SPAWN_EGG.get(),
+                ModItems.SHATTERED_ECHO_SPAWN_EGG.get(), ModItems.CRYSTAL_WRAITH_SPAWN_EGG.get(),
+                ModItems.RESONANT_STALKER_SPAWN_EGG.get(), ModItems.CRYSTAL_SENTINEL_SPAWN_EGG.get());
+        addAfter(CreativeModeTabs.BUILDING_BLOCKS, Items.CHERRY_BUTTON,
+                ModBlocks.CRYSTAL_LOG.get(), ModBlocks.CRYSTAL_WOOD.get(),
+                ModBlocks.STRIPPED_CRYSTAL_LOG.get(), ModBlocks.STRIPPED_CRYSTAL_WOOD.get(),
+                ModBlocks.CRYSTAL_PLANKS.get(), ModBlocks.CRYSTAL_STAIRS.get(),
+                ModBlocks.CRYSTAL_SLAB.get(), ModBlocks.CRYSTAL_FENCE.get(),
+                ModBlocks.CRYSTAL_FENCE_GATE.get(), ModBlocks.CRYSTAL_DOOR.get(),
+                ModBlocks.CRYSTAL_TRAPDOOR.get(), ModBlocks.CRYSTAL_PRESSURE_PLATE.get(),
+                ModBlocks.CRYSTAL_BUTTON.get());
+        addAfter(CreativeModeTabs.NATURAL_BLOCKS, Items.GRASS_BLOCK,
+                ModBlocks.CRYSTAL_GRASS_BLOCK.get(), ModBlocks.CRYSTAL_DIRT.get(),
+                ModBlocks.COARSE_CRYSTAL_DIRT.get(), ModBlocks.ROOTED_CRYSTAL_DIRT.get(),
+                ModBlocks.CRYSTAL_DIRT_PATH.get(), ModBlocks.CRYSTAL_FARMLAND.get(),
+                ModBlocks.CRYSTAL_LOG.get(), ModBlocks.CRYSTAL_LEAVES.get(),
+                ModBlocks.CRYSTAL_GRASS.get(), ModBlocks.CRYSTAL_BLOOM.get(),
+                ModBlocks.SHARD_BLOSSOM.get());
+        addAfter(CreativeModeTabs.COMBAT, Items.SPECTRAL_ARROW,
+                ModItems.RESONANT_ARROW.get(), ModItems.RESONANT_SWORD.get(),
+                ModItems.RESONANT_SPEAR.get(), ModItems.RESONANT_AXE.get(),
+                ModItems.RESONANT_HELMET.get(), ModItems.RESONANT_CHESTPLATE.get(),
+                ModItems.RESONANT_LEGGINGS.get(), ModItems.RESONANT_BOOTS.get(),
+                ModItems.RESONANT_HORSE_ARMOR.get(), ModItems.RESONANT_WOLF_ARMOR.get(),
+                ModItems.RESONANT_NAUTILUS_ARMOR.get(), ModItems.RESONANT_TOTEM.get());
+        addAfter(CreativeModeTabs.TOOLS_AND_UTILITIES, Items.IRON_HOE,
+                ModItems.RESONANT_SHOVEL.get(), ModItems.RESONANT_PICKAXE.get(),
+                ModItems.RESONANT_AXE.get(), ModItems.RESONANT_HOE.get());
+        addAfter(CreativeModeTabs.FUNCTIONAL_BLOCKS, Items.SOUL_LANTERN,
+                ModBlocks.RESONANT_LANTERN.get());
+        addAfter(CreativeModeTabs.REDSTONE_BLOCKS, Items.DAYLIGHT_DETECTOR,
+                ModBlocks.FREQUENCY_RELAY.get());
     }
 }

@@ -92,7 +92,6 @@ public class ChorusResonatorRenderer implements BlockEntityRenderer<ChorusResona
         poseStack.popPose();
     }
 
-    @Override
     public AABB getRenderBoundingBox(ChorusResonatorBlockEntity blockEntity) {
         BlockPos pos = blockEntity.getBlockPos();
         return new AABB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2.5, pos.getZ() + 2);

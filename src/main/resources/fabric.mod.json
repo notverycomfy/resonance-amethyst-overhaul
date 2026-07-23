@@ -9,8 +9,8 @@
     "homepage": "https://modrinth.com/mod/resonance-amethyst-overhaul",
     "sources": "https://github.com/notverycomfy/resonance-amethyst-overhaul"
   },
-  "license": "MIT",
-  "icon": "assets/resonance/icon.png",
+  "license": "All Rights Reserved",
+  "icon": "resonance.png",
   "environment": "*",
   "entrypoints": {
     "main": ["com.resonance.Resonance"],
