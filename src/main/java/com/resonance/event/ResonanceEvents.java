@@ -127,7 +127,7 @@ public final class ResonanceEvents {
         if (resonance != null) {
             RECENTLY_RESONANT.add(target.getId());
             BONUS_PENDING.add(target.getId());
-            if (attacker != null && level.getRandom().nextFloat() < 0.02F) {
+            if (attacker != null && level.getRandom().nextFloat() < 0.01F) {
                 trySpawnStalker(level, target.blockPosition());
             }
         }
