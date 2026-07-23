@@ -27,7 +27,7 @@ public class ResonantLanternBlockEntity extends BlockEntity {
             if (level instanceof ServerLevel serverLevel) {
                 AABB area = new AABB(pos).inflate(12.0);
                 for (Monster mob : serverLevel.getEntitiesOfClass(Monster.class, area)) {
-                    mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, 100, 0));
+                    mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), 100, 0));
                 }
             }
         }

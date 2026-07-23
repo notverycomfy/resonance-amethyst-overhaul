@@ -280,7 +280,7 @@ public class ChorusResonatorBlockEntity extends BlockEntity {
                 for (net.minecraft.server.level.ServerPlayer player : serverLevel.getEntitiesOfClass(
                         net.minecraft.server.level.ServerPlayer.class,
                         new net.minecraft.world.phys.AABB(pos).inflate(32))) {
-                    net.minecraft.advancements.CriteriaTriggers.SUMMONED_ENTITY.trigger(player, boss);
+                    net.minecraft.advancements.triggers.CriteriaTriggers.SUMMONED_ENTITY.trigger(player, boss);
                 }
             }
 

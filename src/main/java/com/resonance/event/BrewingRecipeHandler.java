@@ -12,10 +12,10 @@ public final class BrewingRecipeHandler {
 
     public static void register() {
         FabricPotionBrewingBuilder.BUILD.register(builder -> {
-            builder.addMix(Potions.AWKWARD, ModItems.AMETHYST_INGOT.get(), ModPotions.RESONANCE);
-            builder.addMix(ModPotions.RESONANCE, Items.REDSTONE, ModPotions.LONG_RESONANCE);
-            builder.addMix(ModPotions.RESONANCE, Items.GLOWSTONE_DUST, ModPotions.STRONG_RESONANCE);
-            builder.addMix(ModPotions.STRONG_RESONANCE, ModItems.AMETHYST_INGOT.get(), ModPotions.STRONGEST_RESONANCE);
+            builder.addMix(Potions.AWKWARD, ModItems.AMETHYST_INGOT.get(), ModPotions.RESONANCE.holder());
+            builder.addMix(ModPotions.RESONANCE.holder(), Items.REDSTONE, ModPotions.LONG_RESONANCE.holder());
+            builder.addMix(ModPotions.RESONANCE.holder(), Items.GLOWSTONE_DUST, ModPotions.STRONG_RESONANCE.holder());
+            builder.addMix(ModPotions.STRONG_RESONANCE.holder(), ModItems.AMETHYST_INGOT.get(), ModPotions.STRONGEST_RESONANCE.holder());
         });
     }
 }

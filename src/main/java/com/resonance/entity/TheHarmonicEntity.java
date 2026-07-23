@@ -613,7 +613,7 @@ public class TheHarmonicEntity extends Mob {
                 shockwaveHitPlayers.add(player.getUUID());
                 Vec3 dir = player.position().subtract(this.getX(), player.getY(), this.getZ()).normalize();
                 player.hurtServer(level, level.damageSources().sonicBoom(this), 12.0F);
-                player.addEffect(new MobEffectInstance(ModEffects.RESONANCE, 100, 1), this);
+                player.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), 100, 1), this);
                 player.push(dir.x * 2.0, 0.6, dir.z * 2.0);
             }
         }
@@ -715,7 +715,7 @@ public class TheHarmonicEntity extends Mob {
 
             List<Player> players = level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(10));
             for (Player player : players) {
-                player.addEffect(new MobEffectInstance(ModEffects.RESONANCE, 60, pendingPhase - 1), this);
+                player.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), 60, pendingPhase - 1), this);
             }
 
             if (pendingPhase == 4) {

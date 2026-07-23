@@ -72,7 +72,7 @@ public class FrequencyRelayBlockEntity extends BlockEntity {
                 AABB area = new AABB(pos).inflate(8.0);
                 boolean found = false;
                 for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, area)) {
-                    if (entity.hasEffect(ModEffects.RESONANCE)) {
+                    if (entity.hasEffect(ModEffects.RESONANCE.holder())) {
                         found = true;
                         break;
                     }

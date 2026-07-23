@@ -208,8 +208,7 @@ public class CrystalWraithEntity extends Monster {
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != this)) {
             mob.hurtServer(level, level.damageSources().mobAttack(this), 6.0F);
             Vec3 knockDir = mob.position().subtract(this.position()).normalize();
-            mob.knockback(1.8, -knockDir.x, -knockDir.z);
-            mob.push(0, 0.4, 0);
+            mob.push(knockDir.x * 1.8, 0.4, knockDir.z * 1.8);
         }
     }
 

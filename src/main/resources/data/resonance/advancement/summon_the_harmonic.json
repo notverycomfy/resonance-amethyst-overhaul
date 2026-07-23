@@ -12,7 +12,13 @@
     "summoned": {
       "trigger": "minecraft:summoned_entity",
       "conditions": {
-        "entity": { "type": "resonance:the_harmonic" }
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": { "minecraft:entity_type": "resonance:the_harmonic" }
+          }
+        ]
       }
     }
   },

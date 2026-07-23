@@ -38,7 +38,8 @@ public class DeferredRegister<T> {
     public <I extends T> DeferredHolder<T, I> register(String name, Supplier<? extends I> supplier) {
         Identifier id = Identifier.fromNamespaceAndPath(namespace, name);
         DeferredHolder<T, I> holder = new DeferredHolder<>(id);
-        holder.bind(Registry.register(registry, id, supplier.get()));
+        I value = Registry.register(registry, id, supplier.get());
+        holder.bind(value, registry.wrapAsHolder(value));
         return holder;
     }
 
@@ -54,7 +55,8 @@ public class DeferredRegister<T> {
             ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
             B block = factory.apply(properties.get().setId(key));
             DeferredBlock<B> holder = new DeferredBlock<>(id);
-            holder.bind(Registry.register(registry, id, block));
+            B value = Registry.register(registry, id, block);
+            holder.bind(value, registry.wrapAsHolder(value));
             return holder;
         }
     }
@@ -71,7 +73,8 @@ public class DeferredRegister<T> {
             ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
             I item = factory.apply(properties.get().setId(key));
             DeferredItem<I> holder = new DeferredItem<>(id);
-            holder.bind(Registry.register(registry, id, item));
+            I value = Registry.register(registry, id, item);
+            holder.bind(value, registry.wrapAsHolder(value));
             return holder;
         }
 

@@ -32,9 +32,9 @@ public class ResonantSpearItem extends Item {
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postHurtEnemy(stack, target, attacker);
         if (!(attacker.level() instanceof ServerLevel level)) return;
-        if (!target.hasEffect(ModEffects.RESONANCE)) return;
+        if (!target.hasEffect(ModEffects.RESONANCE.holder())) return;
 
-        target.removeEffect(ModEffects.RESONANCE);
+        target.removeEffect(ModEffects.RESONANCE.holder());
         target.hurt(level.damageSources().playerAttack((Player) attacker), BURST_DAMAGE);
 
         level.playSound(null, target.blockPosition(), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.PLAYERS, 1.2F, 0.7F);

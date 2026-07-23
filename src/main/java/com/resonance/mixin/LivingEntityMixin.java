@@ -49,7 +49,7 @@ public abstract class LivingEntityMixin {
         }
         AABB area = player.getBoundingBox().inflate(8.0);
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, entity -> entity != player)) {
-            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE,
+            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(),
                     Config.RESONANCE_DURATION.getAsInt() * 2, 2), player);
         }
         level.playSound(null, player.blockPosition(), ModSounds.RESONANCE_PULSE.get(),

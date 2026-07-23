@@ -23,7 +23,7 @@ public class CrystalGrassBlock extends GrassBlock {
         BlockState above = level.getBlockState(pos.above());
         if (above.is(Blocks.SNOW) && above.getValue(SnowLayerBlock.LAYERS) == 1) return true;
         if (above.getFluidState().isFull()) return false;
-        return LightEngine.getLightBlockInto(state, above, Direction.UP, above.getLightDampening()) < 15;
+        return LightEngine.getLightDampeningInto(state, above, Direction.UP, above.getLightDampening()) < 15;
     }
 
     private static boolean canPropagate(BlockState state, LevelReader level, BlockPos pos) {

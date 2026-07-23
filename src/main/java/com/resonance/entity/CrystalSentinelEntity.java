@@ -274,7 +274,7 @@ public class CrystalSentinelEntity extends Shulker {
                 } else if (attackTime >= sentinel.getAttackDuration()) {
                     if (sentinel.level() instanceof ServerLevel serverLevel) {
                         target.hurtServer(serverLevel, serverLevel.damageSources().indirectMagic(sentinel, sentinel), BEAM_DAMAGE);
-                        target.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 1), sentinel);
+                        target.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 1), sentinel);
                     }
                     sentinel.setBeamTargetId(0);
                     attackTime = -10;

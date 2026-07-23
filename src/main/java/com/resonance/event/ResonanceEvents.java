@@ -90,7 +90,7 @@ public final class ResonanceEvents {
         Player attacker = source.getEntity() instanceof Player player ? player : null;
         if (attacker != null && source.getDirectEntity() == attacker
                 && attacker.getMainHandItem().is(ModItems.RESONANT_SWORD.get())) {
-            target.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
+            target.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
             RECENTLY_RESONANT.add(target.getId());
             level.playSound(null, target.blockPosition(), ModSounds.RESONANCE_CHIME.get(), SoundSource.PLAYERS, 0.8F, 1.3F);
         }
@@ -105,9 +105,9 @@ public final class ResonanceEvents {
                     30, 1.0, 1.0, 1.0, 0.1);
             for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(5.0),
                     entity -> entity != player)) {
-                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), player);
+                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), player);
                 Vec3 direction = mob.position().subtract(player.position()).normalize();
-                mob.knockback(1.5, direction.x, direction.z);
+                mob.push(direction.x * 1.5, 0.2, direction.z * 1.5);
             }
             return false;
         }
@@ -122,10 +122,10 @@ public final class ResonanceEvents {
 
         if (target instanceof ServerPlayer player && source.getEntity() instanceof LivingEntity meleeAttacker
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.RESONANT_CHESTPLATE.get())) {
-            meleeAttacker.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), player);
+            meleeAttacker.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), player);
         }
 
-        MobEffectInstance resonance = target.getEffect(ModEffects.RESONANCE);
+        MobEffectInstance resonance = target.getEffect(ModEffects.RESONANCE.holder());
         if (resonance != null && REAPPLYING_DAMAGE.add(target.getId())) {
             RECENTLY_RESONANT.add(target.getId());
             float multiplier = 1.0F + (float) (Config.RESONANCE_DAMAGE_BONUS.getAsDouble()
@@ -142,7 +142,7 @@ public final class ResonanceEvents {
 
     private static void afterDeath(LivingEntity dead, net.minecraft.world.damagesource.DamageSource source) {
         if (!(dead.level() instanceof ServerLevel level)
-                || (!RECENTLY_RESONANT.remove(dead.getId()) && !dead.hasEffect(ModEffects.RESONANCE))) {
+                || (!RECENTLY_RESONANT.remove(dead.getId()) && !dead.hasEffect(ModEffects.RESONANCE.holder()))) {
             return;
         }
 
@@ -217,7 +217,7 @@ public final class ResonanceEvents {
             }
             for (Monster mob : level.getEntitiesOfClass(Monster.class,
                     nautilus.getBoundingBox().inflate(6.0), Monster::isInWater)) {
-                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE,
+                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(),
                         Config.RESONANCE_DURATION.getAsInt(), 0));
             }
         }
@@ -226,7 +226,7 @@ public final class ResonanceEvents {
     private static void applyHostileAura(ServerLevel level, LivingEntity source, double radius) {
         boolean applied = false;
         for (Monster mob : level.getEntitiesOfClass(Monster.class, source.getBoundingBox().inflate(radius))) {
-            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0));
+            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0));
             applied = true;
         }
         if (applied) {
@@ -251,7 +251,7 @@ public final class ResonanceEvents {
 
         if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.RESONANT_HELMET.get())) {
             for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(16.0),
-                    entity -> entity != player && entity.hasEffect(ModEffects.RESONANCE))) {
+                    entity -> entity != player && entity.hasEffect(ModEffects.RESONANCE.holder()))) {
                 mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 25, 0, true, false, false));
             }
         }
@@ -324,7 +324,7 @@ public final class ResonanceEvents {
                 && (held.is(ModItems.RESONANT_SWORD.get()) || held.is(ModItems.RESONANT_AXE.get())
                 || held.is(ModItems.RESONANT_SPEAR.get()))) {
             for (Monster mob : server.getEntitiesOfClass(Monster.class, new AABB(pos).inflate(8.0))) {
-                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE,
+                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(),
                         Config.RESONANCE_DURATION.getAsInt() * 2, 1), player);
             }
             server.sendParticles(ParticleTypes.SCULK_SOUL, pos.getX() + 0.5, pos.getY() + 1.0,

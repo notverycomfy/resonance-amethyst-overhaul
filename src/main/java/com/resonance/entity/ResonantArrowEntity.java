@@ -46,13 +46,13 @@ public class ResonantArrowEntity extends AbstractArrow {
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
         super.doPostHurtEffects(target);
-        target.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
+        target.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
         if (this.level() instanceof ServerLevel level) {
             spawnImpactEffects(level, target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ());
             LivingEntity shooter = this.getOwner() instanceof LivingEntity owner ? owner : null;
             AABB area = target.getBoundingBox().inflate(3.0);
             for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != target && e != shooter)) {
-                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
+                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
             }
         }
     }
@@ -66,7 +66,7 @@ public class ResonantArrowEntity extends AbstractArrow {
             LivingEntity shooter = this.getOwner() instanceof LivingEntity owner ? owner : null;
             AABB area = new AABB(pos.x - 3, pos.y - 3, pos.z - 3, pos.x + 3, pos.y + 3, pos.z + 3);
             for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != shooter)) {
-                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
+                mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), this.getEffectSource());
             }
         }
     }

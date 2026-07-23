@@ -306,7 +306,8 @@ public class CrystalForestSpreadData extends SavedData {
                 trunkPlacer,
                 BlockStateProvider.simple(com.resonance.registry.ModBlocks.CRYSTAL_LEAVES.get()),
                 foliagePlacer,
-                new TwoLayersFeatureSize(1, 0, 2))
+                new TwoLayersFeatureSize(1, 0, 2),
+                BlockStateProvider.simple(com.resonance.registry.ModBlocks.ROOTED_CRYSTAL_DIRT.get()))
                 .belowTrunkProvider(BlockStateProvider.simple(
                         com.resonance.registry.ModBlocks.ROOTED_CRYSTAL_DIRT.get()))
                 .ignoreVines()

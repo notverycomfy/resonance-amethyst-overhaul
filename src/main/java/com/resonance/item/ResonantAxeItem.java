@@ -37,7 +37,7 @@ public class ResonantAxeItem extends AxeItem {
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         super.postHurtEnemy(stack, target, attacker);
         if (!(attacker.level() instanceof ServerLevel level)) return;
-        if (!target.hasEffect(ModEffects.RESONANCE)) return;
+        if (!target.hasEffect(ModEffects.RESONANCE.holder())) return;
         if (level.getRandom().nextFloat() >= 0.40F) return;
 
         level.playSound(null, target.blockPosition(), SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 1.0F, 0.8F);
@@ -53,10 +53,10 @@ public class ResonantAxeItem extends AxeItem {
 
         AABB area = target.getBoundingBox().inflate(3.0);
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != attacker && e != target)) {
-            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
+            mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE.holder(), Config.RESONANCE_DURATION.getAsInt(), 0), attacker);
             mob.hurtServer(level, level.damageSources().mobAttack(attacker), 1.0F);
             Vec3 knockback = mob.position().subtract(target.position()).normalize();
-            mob.knockback(0.8, knockback.x, knockback.z);
+            mob.push(knockback.x * 0.8, 0.15, knockback.z * 0.8);
         }
     }
 }
