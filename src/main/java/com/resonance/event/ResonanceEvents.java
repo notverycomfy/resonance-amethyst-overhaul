@@ -130,9 +130,6 @@ public final class ResonanceEvents {
         if (resonance != null) {
             RECENTLY_RESONANT.add(target.getId());
             BONUS_PENDING.add(target.getId());
-            if (attacker != null && level.getRandom().nextFloat() < 0.01F) {
-                trySpawnStalker(level, target.blockPosition());
-            }
         }
 
         // Apply Resonance after checking the existing effect so the first sword
@@ -168,22 +165,23 @@ public final class ResonanceEvents {
 
     private static void trySpawnStalker(ServerLevel level, BlockPos origin) {
         for (int attempt = 0; attempt < 10; attempt++) {
-            BlockPos candidate = origin.offset(
-                    level.getRandom().nextIntBetweenInclusive(-8, 8), 0,
-                    level.getRandom().nextIntBetweenInclusive(-8, 8));
-            BlockPos spawnPos = level.getHeightmapPos(
-                    net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, candidate);
-            if (spawnPos.distSqr(origin) <= 9.0) {
+            int dx = level.getRandom().nextIntBetweenInclusive(-8, 8);
+            int dz = level.getRandom().nextIntBetweenInclusive(-8, 8);
+            if (dx * dx + dz * dz <= 9) {
                 continue;
             }
+            BlockPos candidate = origin.offset(dx, 0, dz);
+            BlockPos spawnPos = level.getHeightmapPos(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, candidate);
             var stalker = ModEntities.RESONANT_STALKER.get().create(
                     level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
             if (stalker != null) {
                 stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
                 stalker.setYRot(level.getRandom().nextFloat() * 360.0F);
-                level.addFreshEntity(stalker);
+                if (level.noCollision(stalker) && level.addFreshEntity(stalker)) {
+                    return;
+                }
             }
-            return;
         }
     }
 
@@ -191,6 +189,11 @@ public final class ResonanceEvents {
         if (!(dead.level() instanceof ServerLevel level)
                 || (!RECENTLY_RESONANT.remove(dead.getId()) && !dead.hasEffect(ModEffects.RESONANCE.holder()))) {
             return;
+        }
+
+        // A player killing a resonating mob has a 1% chance to draw a Stalker.
+        if (source.getEntity() instanceof Player && level.getRandom().nextFloat() < 0.01F) {
+            trySpawnStalker(level, dead.blockPosition());
         }
 
         if (level.getRandom().nextFloat() < 0.50F) {
