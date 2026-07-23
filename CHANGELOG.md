@@ -19,3 +19,7 @@
 - Added complete NeoForge and Fabric support for Minecraft 26.1.2 and 26.2.
 - Corrected Fabric creative-tab placement and removed duplicate entries.
 - Changed recipe-book progression so Resonance recipes unlock after discovering amethyst instead of automatically on joining a world.
+- Fixed Fabric Resonant attacks canceling vanilla hit completion, restoring tool durability, sword sweeping attacks, and critical hits.
+- Reduced Shattered Echo encounter rolls to once per minute per player at a 50% chance.
+- Added the missing Fabric Resonant Stalker encounter roll and standardized its chance at 2% across loaders.
+- Split recipe-book unlocks by discovered ingredient and separated crystal wood recipes from vanilla wood recipe groups.
