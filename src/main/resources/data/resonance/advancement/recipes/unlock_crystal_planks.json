@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "has_crystal_planks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "resonance:crystal_planks"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_crystal_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:crystal_button",
+      "resonance:crystal_door",
+      "resonance:crystal_fence",
+      "resonance:crystal_fence_gate",
+      "resonance:crystal_pressure_plate",
+      "resonance:crystal_slab",
+      "resonance:crystal_stairs",
+      "resonance:crystal_trapdoor"
+    ]
+  }
+}
