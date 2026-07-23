@@ -310,6 +310,11 @@ public final class ResonanceEvents {
 
         BlockPos feet = player.blockPosition();
         boolean onPath = isMarkedPath(level, feet) || isMarkedPath(level, feet.below());
+        if (onPath) {
+            level.sendParticles(ParticleTypes.END_ROD,
+                    player.getX(), player.getY() + 0.1, player.getZ(),
+                    1, 0.2, 0.0, 0.2, 0.01);
+        }
         float bonus = PATH_SPEED_BONUS.getOrDefault(id, 0.0F);
         bonus = onPath ? Math.min(MAX_PATH_SPEED, bonus + 0.02F) : Math.max(0.0F, bonus - 0.04F);
         speed.removeModifier(PATH_SPEED_ID);
@@ -337,7 +342,9 @@ public final class ResonanceEvents {
             replacement = log.getStrippedState(state);
         } else if (held.getItem() instanceof ShovelItem && isCrystalDirt(state)) {
             replacement = ModBlocks.CRYSTAL_DIRT_PATH.get().defaultBlockState();
-            ResonantPathData.get(server).add(pos);
+            if (held.is(ModItems.RESONANT_SHOVEL.get())) {
+                ResonantPathData.get(server).add(pos);
+            }
         } else if (held.getItem() instanceof HoeItem) {
             if (state.is(ModBlocks.COARSE_CRYSTAL_DIRT.get()) || state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get())) {
                 replacement = ModBlocks.CRYSTAL_DIRT.get().defaultBlockState();
@@ -365,8 +372,12 @@ public final class ResonanceEvents {
                 mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE,
                         Config.RESONANCE_DURATION.getAsInt() * 2, 1), player);
             }
+            server.playSound(null, pos, SoundEvents.SCULK_CLICKING, SoundSource.BLOCKS, 1.0F, 0.6F);
+            server.playSound(null, pos, ModSounds.RESONANCE_CHIME.get(), SoundSource.BLOCKS, 1.2F, 0.8F);
             server.sendParticles(ParticleTypes.SCULK_SOUL, pos.getX() + 0.5, pos.getY() + 1.0,
                     pos.getZ() + 0.5, 20, 2.0, 1.0, 2.0, 0.05);
+            server.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.0,
+                    pos.getZ() + 0.5, 15, 2.0, 1.0, 2.0, 0.05);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -390,6 +401,15 @@ public final class ResonanceEvents {
                     break;
                 }
             }
+        }
+        if (count > 0) {
+            server.playSound(null, pos, SoundEvents.AMETHYST_CLUSTER_BREAK,
+                    SoundSource.BLOCKS, 1.0F, 1.2F);
+            server.playSound(null, pos, ModSounds.RESONANCE_CHIME.get(),
+                    SoundSource.BLOCKS, 0.6F, 1.3F);
+            server.sendParticles(ParticleTypes.END_ROD,
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    8, 0.5, 0.5, 0.5, 0.05);
         }
     }
 
