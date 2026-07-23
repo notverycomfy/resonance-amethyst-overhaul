@@ -161,7 +161,7 @@ This roadmap records the actual state of the mod as of July 22, 2026. Completed 
 - [x] Arena/world-generation overlap audit completed.
 - [x] Dense Crystal Forest performance pass completed.
 - [x] Clean Gradle build produces `resonance-1.0.0.jar`.
-- [x] MIT license, README, changelog, mod icon, metadata, and configuration defaults prepared.
+- [x] ARR license, README, changelog, mod icon, metadata, and configuration defaults prepared.
 - [x] Private GitHub development repository created and initial project snapshot pushed.
 
 ---
