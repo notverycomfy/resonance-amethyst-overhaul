@@ -17,3 +17,5 @@
 - Added immediate, encounter-aware boss music for The Harmonic that cleanly yields back to normal music after the fight.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
 - Added complete NeoForge and Fabric support for Minecraft 26.1.2 and 26.2.
+- Corrected Fabric creative-tab placement and removed duplicate entries.
+- Changed recipe-book progression so Resonance recipes unlock after discovering amethyst instead of automatically on joining a world.
