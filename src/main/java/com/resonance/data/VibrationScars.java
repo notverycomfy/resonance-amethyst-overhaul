@@ -27,9 +27,29 @@ public class VibrationScars {
      */
     public static boolean add(Level level, BlockPos pos) {
         Map<Long, Integer> map = scars.computeIfAbsent(level.dimension(), k -> new ConcurrentHashMap<>());
-        if (map.size() >= MAX_SCARS_PER_LEVEL && !map.containsKey(pos.asLong())) return false;
-        map.put(pos.asLong(), SCAR_DURATION);
-        return countNear(level, pos, CLUSTER_RADIUS) >= WRAITH_THRESHOLD;
+        BlockPos placement = findAvailablePosition(map, pos);
+        if (map.size() >= MAX_SCARS_PER_LEVEL && !map.containsKey(placement.asLong())) return false;
+        map.put(placement.asLong(), SCAR_DURATION);
+        return countNear(level, placement, CLUSTER_RADIUS) >= WRAITH_THRESHOLD;
+    }
+
+    /**
+     * Keep repeated kills in the same block from replacing the existing scar.
+     * A two-block horizontal spread provides enough distinct positions for the
+     * seven-scar Wraith threshold without moving the cluster away from combat.
+     */
+    private static BlockPos findAvailablePosition(Map<Long, Integer> map, BlockPos origin) {
+        if (!map.containsKey(origin.asLong())) return origin;
+        for (int radius = 1; radius <= 2; radius++) {
+            for (int x = -radius; x <= radius; x++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (Math.abs(x) != radius && Math.abs(z) != radius) continue;
+                    BlockPos candidate = origin.offset(x, 0, z);
+                    if (!map.containsKey(candidate.asLong())) return candidate;
+                }
+            }
+        }
+        return origin;
     }
 
     /** Decrements every scar's timer for this level, dropping expired ones. */
