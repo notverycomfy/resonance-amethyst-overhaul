@@ -33,4 +33,4 @@ The common configuration controls Resonance damage, effect duration, Harmonic Sh
 
 ## License
 
-MIT
+ARR
