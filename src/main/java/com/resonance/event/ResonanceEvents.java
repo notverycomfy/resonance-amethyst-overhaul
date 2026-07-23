@@ -7,6 +7,7 @@ import com.resonance.data.ResonantPathData;
 import com.resonance.data.VibrationScars;
 import com.resonance.entity.ShatteredEchoEntity;
 import com.resonance.registry.ModEffects;
+import com.resonance.registry.ModEntities;
 import com.resonance.registry.ModItems;
 import com.resonance.registry.ModBlocks;
 import java.util.HashMap;
@@ -103,27 +104,6 @@ public class ResonanceEvents {
             recentlyResonant.add(target.getId());
             float multiplier = 1.0F + (float) (Config.RESONANCE_DAMAGE_BONUS.getAsDouble() * (resonance.getAmplifier() + 1));
             event.setAmount(event.getAmount() * multiplier);
-            // Stalker spawn: 1% chance per Resonance hit to summon a Stalker nearby
-            if (target.level() instanceof ServerLevel serverLevel
-                    && event.getSource().getEntity() instanceof Player
-                    && serverLevel.getRandom().nextFloat() < 0.01F) {
-                BlockPos origin = target.blockPosition();
-                for (int attempt = 0; attempt < 10; attempt++) {
-                    int dx = serverLevel.getRandom().nextIntBetweenInclusive(-8, 8);
-                    int dz = serverLevel.getRandom().nextIntBetweenInclusive(-8, 8);
-                    BlockPos spawnPos = origin.offset(dx, 0, dz);
-                    spawnPos = serverLevel.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawnPos);
-                    if (spawnPos.distSqr(origin) > 9) {
-                        var stalker = com.resonance.registry.ModEntities.RESONANT_STALKER.get().create(serverLevel, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-                        if (stalker != null) {
-                            stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
-                            stalker.setYRot(serverLevel.getRandom().nextFloat() * 360.0F);
-                            serverLevel.addFreshEntity(stalker);
-                        }
-                        break;
-                    }
-                }
-            }
         }
 
         // Apply Resonance before damage resolves so sweeping targets and lethal
@@ -265,12 +245,39 @@ public class ResonanceEvents {
 
     }
 
+    private static void trySpawnStalker(ServerLevel level, BlockPos origin) {
+        for (int attempt = 0; attempt < 10; attempt++) {
+            int dx = level.getRandom().nextIntBetweenInclusive(-8, 8);
+            int dz = level.getRandom().nextIntBetweenInclusive(-8, 8);
+            if (dx * dx + dz * dz <= 9) {
+                continue;
+            }
+            BlockPos candidate = origin.offset(dx, 0, dz);
+            BlockPos spawnPos = level.getHeightmapPos(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, candidate);
+            var stalker = ModEntities.RESONANT_STALKER.get().create(
+                    level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+            if (stalker != null) {
+                stalker.setPos(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+                stalker.setYRot(level.getRandom().nextFloat() * 360.0F);
+                if (level.noCollision(stalker) && level.addFreshEntity(stalker)) {
+                    return;
+                }
+            }
+        }
+    }
+
     // --- Resonance kill effects: Vibration Scar (50%) + Amethyst Bloom (10%) ---
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         LivingEntity dead = event.getEntity();
         if (!(dead.level() instanceof ServerLevel level)) return;
         if (!recentlyResonant.remove(dead.getId()) && !dead.hasEffect(ModEffects.RESONANCE)) return;
+
+        // A player killing a resonating mob has a 1% chance to draw a Stalker.
+        if (event.getSource().getEntity() instanceof Player && level.getRandom().nextFloat() < 0.01F) {
+            trySpawnStalker(level, dead.blockPosition());
+        }
 
         // Vibration Scar: 50% chance on Resonance kill
         if (level.getRandom().nextFloat() < 0.50F) {
