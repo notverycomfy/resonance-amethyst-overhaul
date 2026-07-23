@@ -3,6 +3,9 @@
   "package": "com.resonance.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
+  "client": [
+    "client.MinecraftMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

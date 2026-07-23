@@ -216,17 +216,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Helmet: make Resonance-afflicted mobs within 16 blocks glow ---
-        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.is(ModItems.RESONANT_HELMET.get())) {
-            AABB scanArea = player.getBoundingBox().inflate(16.0);
-            for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, scanArea, e -> e != player)) {
-                if (mob.hasEffect(ModEffects.RESONANCE)) {
-                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 25, 0, true, false, false));
-                }
-            }
-        }
-
         // --- Leggings: speed boost on stone/deepslate/amethyst ---
         ItemStack leggings = player.getItemBySlot(EquipmentSlot.LEGS);
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
