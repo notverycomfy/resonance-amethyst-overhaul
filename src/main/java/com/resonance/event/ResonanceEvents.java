@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -69,6 +70,7 @@ public final class ResonanceEvents {
     private static final Set<Integer> RECENTLY_RESONANT = new HashSet<>();
     private static final Set<Integer> REAPPLYING_DAMAGE = new HashSet<>();
     private static final Set<Integer> BONUS_PENDING = new HashSet<>();
+    private static final java.util.List<WraithEmergenceEvent> PENDING_EMERGENCES = new java.util.ArrayList<>();
     private static final float MAX_PATH_SPEED = 0.20F;
 
     private ResonanceEvents() {
@@ -199,12 +201,8 @@ public final class ResonanceEvents {
         if (level.getRandom().nextFloat() < 0.50F) {
             BlockPos scarPos = dead.blockPosition();
             if (VibrationScars.add(level, scarPos)) {
-                VibrationScars.clearNear(level, scarPos, 8.0);
-                var wraith = ModEntities.CRYSTAL_WRAITH.get().create(level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
-                if (wraith != null) {
-                    wraith.setPos(scarPos.getX() + 0.5, scarPos.getY(), scarPos.getZ() + 0.5);
-                    level.addFreshEntity(wraith);
-                }
+                java.util.List<BlockPos> scarPositions = VibrationScars.clearNear(level, scarPos, 8.0);
+                playWraithEmergence(level, scarPos, scarPositions);
             }
         }
 
@@ -224,6 +222,8 @@ public final class ResonanceEvents {
     }
 
     private static void levelTick(ServerLevel level) {
+        tickEmergences(level);
+
         for (ServerPlayer player : level.players()) {
             tickPlayer(level, player);
         }
@@ -239,12 +239,83 @@ public final class ResonanceEvents {
         }
 
         Map<Long, Integer> scars = VibrationScars.tick(level);
-        for (long packed : scars.keySet()) {
-            if (level.getRandom().nextFloat() < 0.25F) {
-                BlockPos pos = BlockPos.of(packed);
-                level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0x7A5BB5, 0.7F),
-                        pos.getX() + 0.5, pos.getY() + 0.05, pos.getZ() + 0.5,
-                        2, 0.15, 0.02, 0.15, 0.0);
+        if (scars.isEmpty()) {
+            return;
+        }
+
+        var crackDust = new net.minecraft.core.particles.DustParticleOptions(0x3F256B, 0.7F);
+        var glowDust = new net.minecraft.core.particles.DustParticleOptions(0x7A5BB5, 0.5F);
+        var brightDust = new net.minecraft.core.particles.DustParticleOptions(0xA678F1, 1.0F);
+        java.util.List<long[]> scarPairs = new java.util.ArrayList<>();
+        java.util.List<Map.Entry<Long, Integer>> scarEntries = new java.util.ArrayList<>(scars.entrySet());
+        int[] nearbyCounts = new int[scarEntries.size()];
+        java.util.Arrays.fill(nearbyCounts, 1);
+
+        for (int i = 0; i < scarEntries.size(); i++) {
+            BlockPos a = BlockPos.of(scarEntries.get(i).getKey());
+            for (int j = i + 1; j < scarEntries.size(); j++) {
+                BlockPos b = BlockPos.of(scarEntries.get(j).getKey());
+                double distSq = a.distSqr(b);
+                if (distSq <= 64.0) {
+                    nearbyCounts[i]++;
+                    nearbyCounts[j]++;
+                }
+                if (distSq <= 25.0) {
+                    scarPairs.add(new long[]{scarEntries.get(i).getKey(), scarEntries.get(j).getKey()});
+                }
+            }
+        }
+
+        for (int scarIndex = 0; scarIndex < scarEntries.size(); scarIndex++) {
+            Map.Entry<Long, Integer> entry = scarEntries.get(scarIndex);
+            float freshness = entry.getValue() / (float) VibrationScars.SCAR_DURATION;
+            BlockPos pos = BlockPos.of(entry.getKey());
+            double groundY = getScarGroundY(level, pos);
+            double x = pos.getX() + 0.5;
+            double z = pos.getZ() + 0.5;
+            int nearby = nearbyCounts[scarIndex];
+            float intensity = Math.min(1.0F, freshness + nearby * 0.1F);
+
+            if (level.getRandom().nextFloat() < 0.2F * intensity) {
+                level.sendParticles(crackDust, x, groundY + 0.02, z, 3, 0.15, 0.0, 0.15, 0.0);
+                level.sendParticles(glowDust, x, groundY + 0.03, z, 1, 0.2, 0.0, 0.2, 0.0);
+            }
+            if (nearby >= 3 && level.getRandom().nextFloat() < 0.06F * intensity) {
+                level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, groundY + 0.02, z,
+                        1, 0.1, 0.0, 0.1, 0.001);
+                level.sendParticles(ParticleTypes.SMOKE, x, groundY + 0.05, z,
+                        1, 0.15, 0.02, 0.15, 0.002);
+            }
+            if (nearby >= 6 && level.getRandom().nextFloat() < 0.04F * intensity) {
+                level.sendParticles(brightDust, x, groundY + 0.03, z, 3, 0.2, 0.0, 0.2, 0.0);
+                level.sendParticles(ParticleTypes.REVERSE_PORTAL, x, groundY + 0.05, z,
+                        2, 0.3, 0.05, 0.3, 0.01);
+                if (level.getRandom().nextFloat() < 0.1F) {
+                    level.playSound(null, pos, SoundEvents.SCULK_CATALYST_BLOOM,
+                            SoundSource.AMBIENT, 0.4F, 0.5F + level.getRandom().nextFloat() * 0.3F);
+                }
+            }
+        }
+
+        for (long[] pair : scarPairs) {
+            if (level.getRandom().nextFloat() > 0.12F) {
+                continue;
+            }
+            BlockPos a = BlockPos.of(pair[0]);
+            BlockPos b = BlockPos.of(pair[1]);
+            double ax = a.getX() + 0.5;
+            double az = a.getZ() + 0.5;
+            double bx = b.getX() + 0.5;
+            double bz = b.getZ() + 0.5;
+            double ay = getScarGroundY(level, a);
+            double by = getScarGroundY(level, b);
+            int steps = (int) Math.ceil(Math.sqrt(a.distSqr(b))) * 2;
+            for (int i = 0; i <= steps; i++) {
+                float t = i / (float) steps;
+                double lx = ax + (bx - ax) * t + (level.getRandom().nextFloat() - 0.5) * 0.15;
+                double ly = ay + (by - ay) * t + 0.02;
+                double lz = az + (bz - az) * t + (level.getRandom().nextFloat() - 0.5) * 0.15;
+                level.sendParticles(crackDust, lx, ly, lz, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }
     }
@@ -435,6 +506,133 @@ public final class ResonanceEvents {
                 && player.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.RESONANT_CHESTPLATE.get())
                 && player.getItemBySlot(EquipmentSlot.LEGS).is(ModItems.RESONANT_LEGGINGS.get())
                 && player.getItemBySlot(EquipmentSlot.FEET).is(ModItems.RESONANT_BOOTS.get());
+    }
+
+    private static double getScarGroundY(ServerLevel level, BlockPos pos) {
+        BlockPos ground = pos.below();
+        return level.getBlockState(ground).isSolidRender() ? ground.getY() + 1.0 : pos.getY();
+    }
+
+    private static final class WraithEmergenceEvent {
+        private final net.minecraft.resources.ResourceKey<Level> dimension;
+        private final BlockPos center;
+        private final java.util.List<BlockPos> scarPositions;
+        private int ticksRemaining;
+        private int stage;
+
+        private WraithEmergenceEvent(net.minecraft.resources.ResourceKey<Level> dimension,
+                                    BlockPos center, java.util.List<BlockPos> scarPositions) {
+            this.dimension = dimension;
+            this.center = center;
+            this.scarPositions = scarPositions;
+        }
+    }
+
+    private static void playWraithEmergence(ServerLevel level, BlockPos center,
+                                            java.util.List<BlockPos> scarPositions) {
+        PENDING_EMERGENCES.add(new WraithEmergenceEvent(level.dimension(), center, scarPositions));
+    }
+
+    private static void tickEmergences(ServerLevel level) {
+        var iterator = PENDING_EMERGENCES.iterator();
+        while (iterator.hasNext()) {
+            WraithEmergenceEvent event = iterator.next();
+            if (!event.dimension.equals(level.dimension())) {
+                continue;
+            }
+            if (event.ticksRemaining > 0) {
+                event.ticksRemaining--;
+                continue;
+            }
+
+            var brightPurple = new net.minecraft.core.particles.DustParticleOptions(0xA678F1, 1.5F);
+            var hotWhite = new net.minecraft.core.particles.DustParticleOptions(0xE8D0FF, 2.0F);
+            switch (event.stage) {
+                case 0 -> {
+                    level.playSound(null, event.center, SoundEvents.BEACON_ACTIVATE,
+                            SoundSource.HOSTILE, 1.5F, 0.4F);
+                    for (BlockPos scar : event.scarPositions) {
+                        double x = scar.getX() + 0.5;
+                        double y = getScarGroundY(level, scar);
+                        double z = scar.getZ() + 0.5;
+                        level.sendParticles(brightPurple, x, y + 0.05, z,
+                                15, 0.2, 0.0, 0.2, 0.0);
+                        level.sendParticles(hotWhite, x, y + 0.1, z,
+                                5, 0.1, 0.0, 0.1, 0.0);
+                        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y + 0.05, z,
+                                4, 0.15, 0.0, 0.15, 0.005);
+                    }
+                    event.stage = 1;
+                    event.ticksRemaining = 30;
+                }
+                case 1 -> {
+                    level.playSound(null, event.center, ModSounds.CRYSTAL_WRAITH_ARMOR_BREAK.get(),
+                            SoundSource.HOSTILE, 1.4F, 0.72F);
+                    level.playSound(null, event.center, SoundEvents.GLASS_BREAK,
+                            SoundSource.HOSTILE, 1.5F, 0.6F);
+                    for (BlockPos scar : event.scarPositions) {
+                        double x = scar.getX() + 0.5;
+                        double y = getScarGroundY(level, scar);
+                        double z = scar.getZ() + 0.5;
+                        level.sendParticles(ParticleTypes.EXPLOSION, x, y + 0.2, z,
+                                1, 0.0, 0.0, 0.0, 0.0);
+                        level.sendParticles(brightPurple, x, y + 0.5, z,
+                                20, 0.3, 0.5, 0.3, 0.05);
+                        level.sendParticles(ParticleTypes.REVERSE_PORTAL, x, y + 0.3, z,
+                                10, 0.2, 0.3, 0.2, 0.05);
+                        ItemParticleOption shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
+                        level.sendParticles(shard, x, y + 0.2, z, 8, 0.2, 0.0, 0.2, 0.4);
+                    }
+
+                    double centerX = event.center.getX() + 0.5;
+                    double centerY = getScarGroundY(level, event.center);
+                    double centerZ = event.center.getZ() + 0.5;
+                    for (BlockPos scar : event.scarPositions) {
+                        double scarX = scar.getX() + 0.5;
+                        double scarY = getScarGroundY(level, scar);
+                        double scarZ = scar.getZ() + 0.5;
+                        int steps = Math.max(1, (int) Math.ceil(Math.sqrt(scar.distSqr(event.center))) * 3);
+                        for (int i = 0; i <= steps; i++) {
+                            float progress = i / (float) steps;
+                            level.sendParticles(hotWhite,
+                                    scarX + (centerX - scarX) * progress,
+                                    scarY + (centerY - scarY) * progress + 0.1,
+                                    scarZ + (centerZ - scarZ) * progress,
+                                    1, 0.0, 0.0, 0.0, 0.0);
+                        }
+                    }
+                    event.stage = 2;
+                    event.ticksRemaining = 20;
+                }
+                case 2 -> {
+                    double centerX = event.center.getX() + 0.5;
+                    double centerY = getScarGroundY(level, event.center);
+                    double centerZ = event.center.getZ() + 0.5;
+                    for (int y = 0; y < 12; y++) {
+                        level.sendParticles(brightPurple, centerX, centerY + y * 0.25, centerZ,
+                                5, 0.3, 0.0, 0.3, 0.0);
+                        level.sendParticles(ParticleTypes.END_ROD, centerX, centerY + y * 0.25, centerZ,
+                                2, 0.15, 0.0, 0.15, 0.02);
+                    }
+                    for (int i = 0; i < 36; i++) {
+                        double angle = Math.toRadians(i * 10);
+                        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
+                                centerX + Math.cos(angle) * 2.0, centerY + 0.1,
+                                centerZ + Math.sin(angle) * 2.0,
+                                1, 0.0, 0.1, 0.0, 0.01);
+                    }
+                    var wraith = ModEntities.CRYSTAL_WRAITH.get().create(
+                            level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+                    if (wraith != null) {
+                        wraith.setPos(centerX, centerY, centerZ);
+                        wraith.setYRot(level.getRandom().nextFloat() * 360.0F);
+                        level.addFreshEntity(wraith);
+                    }
+                    iterator.remove();
+                }
+                default -> iterator.remove();
+            }
+        }
     }
 
     private static boolean isOnResonantBlock(Player player) {
