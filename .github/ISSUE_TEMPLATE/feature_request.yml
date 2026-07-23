@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement that fits Resonance and Echoes of the Past.
+title: "[Suggestion]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+      description: Explain the idea and the player experience it would improve.
+    validations:
+      required: true
+  - type: textarea
+    id: theme
+    attributes:
+      label: How does it fit Resonance?
+      description: Describe how it connects to amethyst, sound, geodes, or the existing progression.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for an existing suggestion first.
+          required: true

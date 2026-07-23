@@ -1,0 +1,53 @@
+name: Bug report
+description: Report something in Resonance that is not working correctly.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report a problem.
+  - type: input
+    id: version
+    attributes:
+      label: Resonance version
+      placeholder: Example: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Minecraft and loader version
+      placeholder: Example: Minecraft 26.1.2, NeoForge 26.1.2.81
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Enter a world...
+        2. Use...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, crash reports, or screenshots
+      description: Drag files here or link to a paste. Remove private information first.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I downloaded Resonance from CurseForge or Modrinth.
+          required: true
+        - label: I searched for an existing report of this issue.
+          required: true
