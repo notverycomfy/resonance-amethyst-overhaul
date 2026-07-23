@@ -2,8 +2,11 @@ package com.resonance.mixin;
 
 import com.resonance.data.HarmonizedFarmlandData;
 import com.resonance.registry.ModBlocks;
+import com.resonance.registry.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -31,6 +34,13 @@ public abstract class CropBlockMixin {
         int age = crop.getAge(state);
         if (age < crop.getMaxAge() && random.nextFloat() < 0.20F) {
             level.setBlock(pos, crop.getStateForAge(age + 1), 2);
+        }
+        if (random.nextFloat() < 0.40F) {
+            level.sendParticles(ParticleTypes.END_ROD,
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    5, 0.3, 0.3, 0.3, 0.02);
+            level.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    ModSounds.RESONANCE_CHIME.get(), SoundSource.BLOCKS, 0.8F, 1.4F);
         }
     }
 }
