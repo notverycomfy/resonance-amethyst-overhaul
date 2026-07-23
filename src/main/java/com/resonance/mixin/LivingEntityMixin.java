@@ -58,7 +58,23 @@ public abstract class LivingEntityMixin {
                 30, 2.0, 1.0, 2.0, 0.08);
     }
 
-    @ModifyVariable(method = "calculateFallDamage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    @Inject(method = "causeFallDamage", at = @At("HEAD"))
+    private void resonance$playSoftLandingEffect(double distance, float damageMultiplier,
+                                                  net.minecraft.world.damagesource.DamageSource source,
+                                                  CallbackInfoReturnable<Boolean> callback) {
+        if (distance <= 3.0 || distance > 5.0
+                || !((Object) this instanceof ServerPlayer player)
+                || !player.getItemBySlot(EquipmentSlot.FEET).is(ModItems.RESONANT_BOOTS.get())
+                || !(player.level() instanceof ServerLevel level)) {
+            return;
+        }
+        level.playSound(null, player.blockPosition(), ModSounds.RESONANCE_CHIME.get(),
+                SoundSource.PLAYERS, 0.8F, 1.4F);
+        level.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY(), player.getZ(),
+                10, 0.4, 0.1, 0.4, 0.02);
+    }
+
+    @ModifyVariable(method = "causeFallDamage", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private double resonance$reduceFallDistance(double distance) {
         LivingEntity self = (LivingEntity) (Object) this;
         ItemStack boots = self.getItemBySlot(EquipmentSlot.FEET);
