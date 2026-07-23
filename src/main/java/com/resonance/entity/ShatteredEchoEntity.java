@@ -161,7 +161,8 @@ public class ShatteredEchoEntity extends Monster {
     public static void trySpawnGeodeEncounter(ServerLevel level, Player player) {
         if (level.getDifficulty() == Difficulty.PEACEFUL || player.isSpectator()) return;
         RandomSource random = level.getRandom();
-        if ((level.getGameTime() + player.getId()) % 100 != 0 || random.nextInt(4) != 0) return;
+        // One encounter roll per player per minute, with a 50% chance.
+        if ((level.getGameTime() + player.getId() * 20L) % 1200L != 0L || !random.nextBoolean()) return;
 
         BlockPos playerPos = player.blockPosition();
         if (!isNearAmethyst(level, playerPos, 10, 6)) return;

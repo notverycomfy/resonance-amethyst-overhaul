@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "has_amethyst_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "resonance:amethyst_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_amethyst_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:frequency_relay",
+      "resonance:resonant_arrow",
+      "resonance:resonant_axe",
+      "resonance:resonant_boots",
+      "resonance:resonant_chestplate",
+      "resonance:resonant_helmet",
+      "resonance:resonant_hoe",
+      "resonance:resonant_lantern",
+      "resonance:resonant_leggings",
+      "resonance:resonant_pickaxe",
+      "resonance:resonant_shovel",
+      "resonance:resonant_spear",
+      "resonance:resonant_sword",
+      "resonance:resonant_totem"
+    ]
+  }
+}

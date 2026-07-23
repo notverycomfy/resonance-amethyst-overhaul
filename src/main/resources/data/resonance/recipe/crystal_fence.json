@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "wooden_fence",
   "key": {
     "#": "resonance:crystal_planks",
     "S": "minecraft:stick"

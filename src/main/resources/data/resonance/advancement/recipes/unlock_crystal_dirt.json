@@ -1,0 +1,24 @@
+{
+  "criteria": {
+    "has_crystal_dirt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "resonance:crystal_dirt"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_crystal_dirt"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:coarse_crystal_dirt"
+    ]
+  }
+}

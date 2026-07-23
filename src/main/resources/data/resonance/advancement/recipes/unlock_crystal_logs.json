@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "has_crystal_log": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#resonance:crystal_logs"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_crystal_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resonance:crystal_planks",
+      "resonance:crystal_wood",
+      "resonance:stripped_crystal_wood"
+    ]
+  }
+}
