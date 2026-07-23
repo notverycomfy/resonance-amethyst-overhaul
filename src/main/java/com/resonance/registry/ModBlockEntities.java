@@ -6,8 +6,8 @@ import com.resonance.block.entity.ResonantLanternBlockEntity;
 import com.resonance.block.entity.FrequencyRelayBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import com.resonance.fabric.registry.DeferredHolder;
+import com.resonance.fabric.registry.DeferredRegister;
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =

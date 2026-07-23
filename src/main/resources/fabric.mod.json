@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "resonance",
+  "version": "${version}",
+  "name": "Resonance - Amethyst Overhaul",
+  "description": "An amethyst adventure overhaul with crystal biomes, unique mobs, bosses, gear, farming, foods, structures, and Resonance-powered combat.",
+  "authors": ["notverycomfy"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/resonance-amethyst-overhaul",
+    "sources": "https://github.com/notverycomfy/resonance-amethyst-overhaul"
+  },
+  "license": "MIT",
+  "icon": "assets/resonance/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.resonance.Resonance"],
+    "client": ["com.resonance.ResonanceClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

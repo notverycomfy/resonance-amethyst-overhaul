@@ -12,8 +12,8 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import com.resonance.fabric.registry.DeferredHolder;
+import com.resonance.fabric.registry.DeferredRegister;
 
 public class ModWorldGen {
     public static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES =

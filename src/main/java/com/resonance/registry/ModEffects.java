@@ -5,8 +5,8 @@ import com.resonance.effect.ResonanceEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import com.resonance.fabric.registry.DeferredHolder;
+import com.resonance.fabric.registry.DeferredRegister;
 
 public class ModEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, Resonance.MODID);

@@ -4,8 +4,8 @@ import com.resonance.Resonance;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import com.resonance.fabric.registry.DeferredHolder;
+import com.resonance.fabric.registry.DeferredRegister;
 
 public class ModPotions {
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(Registries.POTION, Resonance.MODID);
