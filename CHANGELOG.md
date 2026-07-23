@@ -21,5 +21,5 @@
 - Changed recipe-book progression so Resonance recipes unlock after discovering amethyst instead of automatically on joining a world.
 - Fixed Fabric Resonant attacks canceling vanilla hit completion, restoring tool durability, sword sweeping attacks, and critical hits.
 - Reduced Shattered Echo encounter rolls to once per minute per player at a 50% chance.
-- Added the missing Fabric Resonant Stalker encounter roll and standardized its chance at 2% across loaders.
+- Added the missing Fabric Resonant Stalker encounter roll while preserving its intended 1% chance across loaders.
 - Split recipe-book unlocks by discovered ingredient and separated crystal wood recipes from vanilla wood recipe groups.

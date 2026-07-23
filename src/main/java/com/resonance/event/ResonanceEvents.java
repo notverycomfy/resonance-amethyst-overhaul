@@ -103,10 +103,10 @@ public class ResonanceEvents {
             recentlyResonant.add(target.getId());
             float multiplier = 1.0F + (float) (Config.RESONANCE_DAMAGE_BONUS.getAsDouble() * (resonance.getAmplifier() + 1));
             event.setAmount(event.getAmount() * multiplier);
-            // Stalker spawn: 2% chance per Resonance hit to summon a Stalker nearby
+            // Stalker spawn: 1% chance per Resonance hit to summon a Stalker nearby
             if (target.level() instanceof ServerLevel serverLevel
                     && event.getSource().getEntity() instanceof Player
-                    && serverLevel.getRandom().nextFloat() < 0.02F) {
+                    && serverLevel.getRandom().nextFloat() < 0.01F) {
                 BlockPos origin = target.blockPosition();
                 for (int attempt = 0; attempt < 10; attempt++) {
                     int dx = serverLevel.getRandom().nextIntBetweenInclusive(-8, 8);
