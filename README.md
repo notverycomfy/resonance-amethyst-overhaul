@@ -12,8 +12,8 @@
 <p align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/resonance-amethyst-overhaul"><img alt="Download on CurseForge" src="https://img.shields.io/badge/Download-CurseForge-F16436?logo=curseforge&logoColor=white"></a>
   <a href="https://modrinth.com/mod/resonance-amethyst-overhaul"><img alt="Download on Modrinth" src="https://img.shields.io/badge/Download-Modrinth-00AF5C?logo=modrinth&logoColor=white"></a>
-  <img alt="Minecraft 26.1.2" src="https://img.shields.io/badge/Minecraft-26.1.2-62B47A">
-  <img alt="NeoForge" src="https://img.shields.io/badge/Loader-NeoForge-EF7C24">
+  <img alt="Minecraft 26.1.2 and 26.2" src="https://img.shields.io/badge/Minecraft-26.1.2%20%7C%2026.2-62B47A">
+  <img alt="NeoForge and Fabric" src="https://img.shields.io/badge/Loaders-NeoForge%20%7C%20Fabric-EF7C24">
   <a href="LICENSE"><img alt="All Rights Reserved" src="https://img.shields.io/badge/License-All%20Rights%20Reserved-blue"></a>
 </p>
 
@@ -42,7 +42,7 @@ The Harmonic tests every part of the Resonance progression. Its encounter combin
 
 ## Installation
 
-1. Install the supported version of Minecraft and NeoForge.
+1. Install a supported version of Minecraft and either NeoForge or Fabric Loader.
 2. Download Resonance from CurseForge or Modrinth using the links above.
 3. Place the downloaded JAR in your Minecraft `mods` folder.
 4. Launch the game and begin by exploring amethyst geodes.
@@ -52,8 +52,9 @@ The Harmonic tests every part of the Resonance progression. Its encounter combin
 | Minecraft | Loader | Status |
 | --- | --- | --- |
 | 26.1.2 | NeoForge 26.1.x | Available |
-| 26.2 | NeoForge | In preparation |
-| 26.1.2 / 26.2 | Fabric | In preparation |
+| 26.2 | NeoForge 26.2.x | Available |
+| 26.1.2 | Fabric | Available |
+| 26.2 | Fabric | Available |
 
 The download pages are the source of truth for supported versions. Resonance currently requires Java 25.
 

@@ -16,3 +16,4 @@
 - Corrected boss and Sentinel beam endpoints and made their full lengths participate in visibility checks.
 - Added immediate, encounter-aware boss music for The Harmonic that cleanly yields back to normal music after the fight.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
+- Added complete NeoForge and Fabric support for Minecraft 26.1.2 and 26.2.
