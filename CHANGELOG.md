@@ -15,4 +15,5 @@
 - Fixed The Harmonic's crystal projectiles so their shape and orientation remain stable as the viewing angle changes.
 - Corrected boss and Sentinel beam endpoints and made their full lengths participate in visibility checks.
 - Added immediate, encounter-aware boss music for The Harmonic that cleanly yields back to normal music after the fight.
+- Completed a four-version consistency audit, corrected 26.2 Harmonic advancement predicates, removed the obsolete global recipe unlock, and normalized armor model JSON encoding.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
