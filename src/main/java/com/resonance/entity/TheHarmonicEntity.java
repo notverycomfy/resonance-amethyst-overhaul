@@ -80,7 +80,7 @@ public class TheHarmonicEntity extends Mob {
 
     private boolean spikeActive = false;
     private int spikeAnimTimer = 0;
-    private BlockPos spikeCenter = BlockPos.ZERO;
+    private final List<BlockPos> spikeCenters = new ArrayList<>();
 
     private int rainTimer = -1;
     private final List<Vec3> rainZones = new ArrayList<>();
@@ -236,7 +236,7 @@ public class TheHarmonicEntity extends Mob {
         }
 
         attackCooldown--;
-        if (attackCooldown <= 0 && getTarget() != null) {
+        if (attackCooldown <= 0 && !getArenaPlayers(level).isEmpty()) {
             crystalBarrage(level, 3);
             attackCooldown = 40;
         }
@@ -311,15 +311,15 @@ public class TheHarmonicEntity extends Mob {
         }
 
         attackCooldown--;
-        if (attackCooldown <= 0 && getTarget() != null) {
+        if (attackCooldown <= 0 && !getArenaPlayers(level).isEmpty()) {
             crystalBarrage(level, 5);
             attackCooldown = 30;
         }
 
         spikeTimer++;
-        if (spikeTimer >= 100 && !spikeActive && getTarget() != null) {
+        if (spikeTimer >= 100 && !spikeActive && !getArenaPlayers(level).isEmpty()) {
             spikeTimer = 0;
-            startCrystalSpikes(level, getTarget());
+            startCrystalSpikes(level);
         }
 
         if (spikeActive) {
@@ -329,13 +329,25 @@ public class TheHarmonicEntity extends Mob {
 
     private static final int SPIKE_ANIM_DURATION = 24;
 
-    private void startCrystalSpikes(ServerLevel level, LivingEntity target) {
+    private void startCrystalSpikes(ServerLevel level) {
+        spikeCenters.clear();
+        for (Player player : getArenaPlayers(level)) {
+            BlockPos center = player.blockPosition();
+            if (!spikeCenters.contains(center)) {
+                spikeCenters.add(center);
+            }
+        }
+        if (spikeCenters.isEmpty()) {
+            return;
+        }
+
         spikeActive = true;
         spikeAnimTimer = 0;
-        spikeCenter = target.blockPosition();
 
-        // Warning rumble before the crystals surface
-        level.playSound(null, spikeCenter, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.HOSTILE, 2.0F, 0.4F);
+        // Warning rumble before the crystals surface beneath every arena player.
+        for (BlockPos center : spikeCenters) {
+            level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.HOSTILE, 2.0F, 0.4F);
+        }
     }
 
     private void tickCrystalSpikes(ServerLevel level) {
@@ -343,6 +355,7 @@ public class TheHarmonicEntity extends Mob {
 
         if (spikeAnimTimer > SPIKE_ANIM_DURATION) {
             spikeActive = false;
+            spikeCenters.clear();
             return;
         }
 
@@ -351,27 +364,33 @@ public class TheHarmonicEntity extends Mob {
         float height = Mth.sin(progress * Mth.PI) * 2.5F;
 
         ItemParticleOption shardParticle = new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.Items.AMETHYST_SHARD);
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                double px = spikeCenter.getX() + 0.5 + dx + (this.random.nextDouble() - 0.5) * 0.4;
-                double pz = spikeCenter.getZ() + 0.5 + dz + (this.random.nextDouble() - 0.5) * 0.4;
-                // Column of shards from the ground up to the current spike height
-                double columnHeight = height * (0.6 + this.random.nextDouble() * 0.4);
-                for (double y = 0; y <= columnHeight; y += 0.5) {
-                    level.sendParticles(shardParticle,
-                            px, spikeCenter.getY() + y, pz, 1, 0.05, 0.05, 0.05, 0.02);
+        for (BlockPos center : spikeCenters) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    double px = center.getX() + 0.5 + dx + (this.random.nextDouble() - 0.5) * 0.4;
+                    double pz = center.getZ() + 0.5 + dz + (this.random.nextDouble() - 0.5) * 0.4;
+                    // Column of shards from the ground up to the current spike height
+                    double columnHeight = height * (0.6 + this.random.nextDouble() * 0.4);
+                    for (double y = 0; y <= columnHeight; y += 0.5) {
+                        level.sendParticles(shardParticle,
+                                px, center.getY() + y, pz, 1, 0.05, 0.05, 0.05, 0.02);
+                    }
                 }
             }
         }
 
         // Eruption peak: damage + knockup
         if (spikeAnimTimer == SPIKE_ANIM_DURATION / 2) {
-            level.playSound(null, spikeCenter, SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.HOSTILE, 2.0F, 0.5F);
-            List<Player> players = level.getEntitiesOfClass(Player.class,
-                    new AABB(spikeCenter).inflate(2));
-            for (Player player : players) {
-                player.push(0, 0.8, 0);
-                player.hurtServer(level, level.damageSources().magic(), 6.0F);
+            Set<UUID> hitPlayers = new HashSet<>();
+            for (BlockPos center : spikeCenters) {
+                level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.HOSTILE, 2.0F, 0.5F);
+                List<Player> players = level.getEntitiesOfClass(Player.class, new AABB(center).inflate(2));
+                for (Player player : players) {
+                    if (hitPlayers.add(player.getUUID())) {
+                        player.push(0, 0.8, 0);
+                        player.hurtServer(level, level.damageSources().magic(), 6.0F);
+                    }
+                }
             }
         }
     }
@@ -386,7 +405,7 @@ public class TheHarmonicEntity extends Mob {
 
         attackCooldown--;
 
-        if (attackCooldown <= 0 && getTarget() != null) {
+        if (attackCooldown <= 0 && !getArenaPlayers(level).isEmpty()) {
             phase4AttackCount++;
             if (phase4AttackCount % 2 == 0) {
                 startCrystalRain(level);
@@ -495,7 +514,7 @@ public class TheHarmonicEntity extends Mob {
 
     private void startCrystalRain(ServerLevel level) {
         rainZones.clear();
-        List<Player> players = level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(24));
+        List<Player> players = getArenaPlayers(level);
         if (players.isEmpty()) return;
 
         for (Player player : players) {
@@ -626,23 +645,31 @@ public class TheHarmonicEntity extends Mob {
 
     // --- Shared attack ---
     private void crystalBarrage(ServerLevel level, int count) {
-        LivingEntity target = getTarget();
-        if (target == null) return;
+        List<Player> targets = getArenaPlayers(level);
+        if (targets.isEmpty()) return;
 
-        for (int i = 0; i < count; i++) {
+        for (int targetIndex = 0; targetIndex < targets.size(); targetIndex++) {
+            Player target = targets.get(targetIndex);
             Vec3 targetPos = target.position().add(0, target.getBbHeight() * 0.5, 0);
-            double angle = (i / (double) count) * Mth.TWO_PI;
-            double spawnX = this.getX() + Mth.cos((float) angle) * 1.5;
-            double spawnY = this.getY() + 3.0 + i * 0.3;
-            double spawnZ = this.getZ() + Mth.sin((float) angle) * 1.5;
-            Vec3 direction = targetPos.subtract(spawnX, spawnY, spawnZ);
-            CrystalShardEntity shard = new CrystalShardEntity(level, this, direction, 6.0F);
-            shard.setPos(spawnX, spawnY, spawnZ);
-            level.addFreshEntity(shard);
+            for (int i = 0; i < count; i++) {
+                double angle = ((i / (double) count) + (targetIndex / (double) targets.size())) * Mth.TWO_PI;
+                double spawnX = this.getX() + Mth.cos((float) angle) * 1.5;
+                double spawnY = this.getY() + 3.0 + i * 0.3;
+                double spawnZ = this.getZ() + Mth.sin((float) angle) * 1.5;
+                Vec3 direction = targetPos.subtract(spawnX, spawnY, spawnZ);
+                CrystalShardEntity shard = new CrystalShardEntity(level, this, direction, 6.0F);
+                shard.setPos(spawnX, spawnY, spawnZ);
+                level.addFreshEntity(shard);
+            }
         }
 
         level.playSound(null, this.getX(), this.getY(), this.getZ(),
                 SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.HOSTILE, 2.0F, 0.8F + count * 0.05F);
+    }
+
+    private List<Player> getArenaPlayers(ServerLevel level) {
+        return level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(24),
+                player -> player.isAlive() && !player.isSpectator());
     }
 
     // --- Phase Transitions ---
@@ -701,6 +728,9 @@ public class TheHarmonicEntity extends Mob {
             shieldRegenTimer = 0;
             transitionTimer = 0;
             spikeTimer = 0;
+            spikeActive = false;
+            spikeAnimTimer = 0;
+            spikeCenters.clear();
             shockwaveTimer = 0;
             phase4AttackCount = 0;
             sentinelSpawnTimer = 0;
@@ -900,6 +930,7 @@ public class TheHarmonicEntity extends Mob {
         this.spikeTimer = 0;
         this.spikeActive = false;
         this.spikeAnimTimer = 0;
+        this.spikeCenters.clear();
         this.rainTimer = -1;
         this.rainZones.clear();
         pillarPositions.clear();
