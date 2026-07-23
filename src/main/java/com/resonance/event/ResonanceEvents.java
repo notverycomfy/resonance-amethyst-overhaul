@@ -294,13 +294,6 @@ public final class ResonanceEvents {
             }
         }
 
-        if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.RESONANT_HELMET.get())) {
-            for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(16.0),
-                    entity -> entity != player && entity.hasEffect(ModEffects.RESONANCE.holder()))) {
-                mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 25, 0, true, false, false));
-            }
-        }
-
         AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speed == null) {
             return;
