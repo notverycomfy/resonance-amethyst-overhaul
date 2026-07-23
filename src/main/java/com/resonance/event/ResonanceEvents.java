@@ -233,12 +233,13 @@ public final class ResonanceEvents {
         }
 
         Map<Long, Integer> scars = VibrationScars.tick(level);
-        if (!scars.isEmpty() && level.getRandom().nextFloat() < 0.25F) {
-            long selected = scars.keySet().iterator().next();
-            BlockPos pos = BlockPos.of(selected);
-            level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0x7A5BB5, 0.7F),
-                    pos.getX() + 0.5, pos.getY() + 0.05, pos.getZ() + 0.5,
-                    2, 0.15, 0.02, 0.15, 0.0);
+        for (long packed : scars.keySet()) {
+            if (level.getRandom().nextFloat() < 0.25F) {
+                BlockPos pos = BlockPos.of(packed);
+                level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0x7A5BB5, 0.7F),
+                        pos.getX() + 0.5, pos.getY() + 0.05, pos.getZ() + 0.5,
+                        2, 0.15, 0.02, 0.15, 0.0);
+            }
         }
     }
 
