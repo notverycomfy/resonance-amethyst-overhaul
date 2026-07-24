@@ -22,13 +22,14 @@ import net.minecraft.world.phys.AABB;
 
 public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEntity> {
 
+    private static final boolean RENDER_ITEM_AT_FULL_BRIGHTNESS = true;
     private static final Identifier BEAM_TEXTURE =
             Identifier.fromNamespaceAndPath(Resonance.MODID, "textures/entity/crystal_sentinel_beam.png");
 
     private static final RenderType BEAM_RENDER_TYPE = RenderTypes.entityCutout(BEAM_TEXTURE);
 
     public HarmonicAnchorRenderer(EntityRendererProvider.Context context) {
-        super(context, 1.5F, true);
+        super(context, 1.5F, RENDER_ITEM_AT_FULL_BRIGHTNESS);
     }
 
     @Override

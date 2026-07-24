@@ -545,7 +545,17 @@ public class ResonanceEvents {
             if (nautilus.isInWater()) {
                 for (var passenger : nautilus.getPassengers()) {
                     if (passenger instanceof LivingEntity rider) {
-                        rider.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 60, 0, true, false, true));
+                        boolean ambientEffect = true;
+                        boolean showParticles = false;
+                        boolean showEffectIcon = true;
+                        rider.addEffect(new MobEffectInstance(
+                                MobEffects.CONDUIT_POWER,
+                                60,
+                                0,
+                                ambientEffect,
+                                showParticles,
+                                showEffectIcon
+                        ));
                     }
                 }
             }
