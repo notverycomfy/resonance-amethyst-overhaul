@@ -208,15 +208,12 @@ public class CrystalForestSpreadData extends SavedData {
             float roll = random.nextFloat();
 
             if (bareGround) {
-                // The dead ground crystallizes into living crystal grass
                 if (roll < 0.75F) {
                     level.setBlock(ground, com.resonance.registry.ModBlocks.CRYSTAL_GRASS_BLOCK.get().defaultBlockState(), 3);
                 } else {
-                    // Calcite permanently fills the ground not claimed by crystal grass.
                     level.setBlock(ground, Blocks.CALCITE.defaultBlockState(), 3);
                 }
             } else {
-                // Life grows out of the crystal grass
                 if (!level.getBlockState(surface).isAir()) continue;
 
                 if (roll < 0.035F) {
@@ -242,7 +239,6 @@ public class CrystalForestSpreadData extends SavedData {
                     x + 0.5, surface.getY() + 0.8, z + 0.5, 2, 0.4, 0.4, 0.4, 0.02);
         }
 
-        // The forest sings as it grows
         if (random.nextFloat() < 0.3F) {
             double angle = random.nextDouble() * Mth.TWO_PI;
             level.playSound(null,
