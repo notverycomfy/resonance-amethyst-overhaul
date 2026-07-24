@@ -82,7 +82,6 @@ public class CrystalSentinelEntity extends Shulker {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    // --- Beam target (synced for client rendering) ---
 
     void setBeamTargetId(int entityId) {
         this.entityData.set(DATA_BEAM_TARGET_ID, entityId);
@@ -153,7 +152,6 @@ public class CrystalSentinelEntity extends Shulker {
         }
     }
 
-    // --- Sounds ---
 
     @Override
     protected SoundEvent getAmbientSound() {
@@ -203,7 +201,6 @@ public class CrystalSentinelEntity extends Shulker {
         this.entityData.set(DATA_PEEK_ID, (byte) amount);
     }
 
-    // --- Beam Attack Goal (guardian-style) ---
 
     static class SentinelBeamGoal extends net.minecraft.world.entity.ai.goal.Goal {
         private final CrystalSentinelEntity sentinel;
@@ -262,7 +259,6 @@ public class CrystalSentinelEntity extends Shulker {
                     return;
                 }
 
-                // Keep peek open during attack
                 if (sentinel.getRawPeekAmount() < 100) {
                     sentinel.setRawPeekAmount(100);
                 }
@@ -286,7 +282,6 @@ public class CrystalSentinelEntity extends Shulker {
         }
     }
 
-    // --- Peek Goal ---
 
     static class SentinelPeekGoal extends net.minecraft.world.entity.ai.goal.Goal {
         private final CrystalSentinelEntity sentinel;
