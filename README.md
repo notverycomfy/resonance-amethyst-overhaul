@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/resonance-icon-sharp-400.png" alt="Resonance crystal emblem" width="180">
+  <img src="https://raw.githubusercontent.com/notverycomfy/resonance-amethyst-overhaul/main/assets/resonance-icon-sharp-400.png" alt="Resonance crystal emblem" width="180">
 </p>
 
 <h1 align="center">Resonance — Amethyst Overhaul</h1>
