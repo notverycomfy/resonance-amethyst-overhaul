@@ -115,10 +115,8 @@ public class CrystalWraithEntity extends Monster {
             return;
         }
 
-        // Slam cooldown
         if (slamCooldown > 0) slamCooldown--;
 
-        // Enraged phase: faster + ground slam attack
         if (isArmorBroken() && getTarget() != null && getTarget().isAlive()) {
             if (slamCooldown <= 0 && distanceTo(getTarget()) < 4.0) {
                 performGroundSlam(level);
@@ -126,7 +124,6 @@ public class CrystalWraithEntity extends Monster {
             }
         }
 
-        // Ambient particles — crystal shimmer while armored, angry embers when broken
         if (tickCount % 5 == 0) {
             if (!isArmorBroken()) {
                 var shimmer = new DustParticleOptions(0xA678F1, 0.8F);
@@ -144,7 +141,6 @@ public class CrystalWraithEntity extends Monster {
         if (isEmerging()) return false;
         if (!isArmorBroken()) {
             crystalArmor -= amount;
-            // Crystal hit feedback
             var shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
             level.sendParticles(shard, getX(), getY() + getBbHeight() * 0.5, getZ(),
                     6, 0.3, 0.3, 0.3, 0.3);
@@ -153,7 +149,6 @@ public class CrystalWraithEntity extends Monster {
             if (crystalArmor <= 0) {
                 breakCrystalArmor(level);
             }
-            // Armor absorbs all damage — entity takes nothing
             return false;
         }
         return super.hurtServer(level, source, amount);
@@ -163,7 +158,6 @@ public class CrystalWraithEntity extends Monster {
         this.entityData.set(DATA_ARMOR_BROKEN, true);
         crystalArmor = 0;
 
-        // Dramatic shatter
         playSound(ModSounds.CRYSTAL_WRAITH_ARMOR_BREAK.get(), 2.0F, 0.95F);
 
         var shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
@@ -177,7 +171,6 @@ public class CrystalWraithEntity extends Monster {
         level.sendParticles(ParticleTypes.EXPLOSION, getX(), getY() + 1.0, getZ(),
                 3, 0.5, 0.3, 0.5, 0.0);
 
-        // Become faster and hit harder once armor breaks
         var speedAttr = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
             speedAttr.setBaseValue(0.34);
@@ -193,7 +186,6 @@ public class CrystalWraithEntity extends Monster {
 
         double cx = getX(), cy = getY(), cz = getZ();
 
-        // Ground ring
         for (int i = 0; i < 24; i++) {
             double angle = Math.toRadians(i * 15);
             double rx = cx + Math.cos(angle) * 3.0;
@@ -203,7 +195,6 @@ public class CrystalWraithEntity extends Monster {
         var slamDust = new DustParticleOptions(0x7A5BB5, 1.5F);
         level.sendParticles(slamDust, cx, cy + 0.2, cz, 15, 2.0, 0.1, 2.0, 0.0);
 
-        // Damage + knockback everything nearby
         AABB area = getBoundingBox().inflate(3.5);
         for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != this)) {
             var slamSource = level.damageSources().mobAttack(this);

@@ -60,12 +60,10 @@ public class HarmonicArenaPiece extends StructurePiece {
                 BlockPos pos = new BlockPos(cx + dx, cy, cz + dz);
                 if (!chunkBB.isInside(pos)) continue;
 
-                // Main platform
                 level.setBlock(pos, Blocks.SMOOTH_BASALT.defaultBlockState(), 2);
                 level.setBlock(pos.below(), Blocks.BASALT.defaultBlockState(), 2);
                 level.setBlock(pos.below(2), Blocks.BASALT.defaultBlockState(), 2);
 
-                // Clear space above
                 for (int y = 1; y <= PILLAR_HEIGHT + 4; y++) {
                     BlockPos above = pos.above(y);
                     if (chunkBB.isInside(above)) {
@@ -73,17 +71,14 @@ public class HarmonicArenaPiece extends StructurePiece {
                     }
                 }
 
-                // Rim edge
                 if (dist > RADIUS - 2 && dist <= RADIUS) {
                     level.setBlock(pos.above(), Blocks.SMOOTH_BASALT.defaultBlockState(), 2);
                 }
 
-                // Inner ring pattern at radius 10-11
                 if (dist >= 10 && dist <= 11) {
                     level.setBlock(pos, Blocks.CALCITE.defaultBlockState(), 2);
                 }
 
-                // Center circle at radius 3
                 if (dist <= 3) {
                     level.setBlock(pos, Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
                     if (dist <= 1) {
@@ -93,13 +88,11 @@ public class HarmonicArenaPiece extends StructurePiece {
             }
         }
 
-        // Chorus Resonator at center
         BlockPos resonatorPos = new BlockPos(cx, cy + 1, cz);
         if (chunkBB.isInside(resonatorPos)) {
             level.setBlock(resonatorPos, ModBlocks.CHORUS_RESONATOR.get().defaultBlockState(), 2);
         }
 
-        // Amethyst pillars around the arena
         for (int i = 0; i < PILLAR_COUNT; i++) {
             float angle = i * Mth.TWO_PI / PILLAR_COUNT;
             int px = cx + Math.round(18 * Mth.cos(angle));
@@ -110,7 +103,6 @@ public class HarmonicArenaPiece extends StructurePiece {
                 if (!chunkBB.isInside(pillarPos)) continue;
 
                 level.setBlock(pillarPos, Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
-                // Wider base
                 if (y <= 2) {
                     for (Direction dir : Direction.Plane.HORIZONTAL) {
                         BlockPos adj = pillarPos.relative(dir);
@@ -121,14 +113,12 @@ public class HarmonicArenaPiece extends StructurePiece {
                 }
             }
 
-            // Cluster on top
             BlockPos top = new BlockPos(px, cy + PILLAR_HEIGHT + 1, pz);
             if (chunkBB.isInside(top)) {
                 level.setBlock(top, Blocks.AMETHYST_CLUSTER.defaultBlockState()
                         .setValue(AmethystClusterBlock.FACING, Direction.UP), 2);
             }
 
-            // Clusters on sides near top
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 BlockPos sidePos = new BlockPos(px, cy + PILLAR_HEIGHT, pz).relative(dir);
                 if (chunkBB.isInside(sidePos) && level.getBlockState(sidePos).isAir()) {

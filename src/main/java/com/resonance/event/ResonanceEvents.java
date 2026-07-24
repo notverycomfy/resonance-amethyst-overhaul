@@ -95,7 +95,6 @@ public class ResonanceEvents {
     private static final float PATH_SPEED_INC = 0.02F;
     private static final float PATH_SPEED_DEC = 0.04F;
 
-    // --- Resonance damage bonus ---
     @SubscribeEvent
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         LivingEntity target = event.getEntity();
@@ -123,7 +122,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Harmonic Shield: absorb hit if full armor set (not fall damage) ---
         if (target instanceof ServerPlayer player) {
             if (event.getSource().is(net.minecraft.world.damagesource.DamageTypes.FALL)) return;
             if (hasFullResonantArmor(player) && !shieldOnCooldown(player)) {
@@ -137,7 +135,6 @@ public class ResonanceEvents {
                 level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 1.6F, 1.2F);
                 level.sendParticles(ParticleTypes.END_ROD, cx, cy, cz, 30, 1.0, 1.0, 1.0, 0.1);
                 level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, cx, cy, cz, 1, 0.0, 0.0, 0.0, 0.0);
-                // Shoot amethyst shards outward in all directions
                 ItemParticleOption shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
                 for (int i = 0; i < 40; i++) {
                     double dx = level.getRandom().nextDouble() * 2.0 - 1.0;
@@ -146,7 +143,6 @@ public class ResonanceEvents {
                     Vec3 dir = new Vec3(dx, dy, dz).normalize();
                     level.sendParticles(shard, cx, cy, cz, 0, dir.x, dir.y, dir.z, 0.7);
                 }
-                // Apply Resonance + knockback to nearby mobs
                 AABB area = player.getBoundingBox().inflate(5.0);
                 for (LivingEntity mob : level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player)) {
                     mob.addEffect(new MobEffectInstance(ModEffects.RESONANCE, Config.RESONANCE_DURATION.getAsInt(), 0), player);
@@ -158,7 +154,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Chestplate: apply Resonance to melee attacker ---
         if (target instanceof ServerPlayer player && event.getSource().getEntity() instanceof LivingEntity attacker) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
             if (chest.is(ModItems.RESONANT_CHESTPLATE.get())) {
@@ -166,7 +161,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Resonant Wolf Armor: redirect all damage into the armor item ---
         if (target instanceof Wolf wolf && !event.getSource().is(DamageTypeTags.BYPASSES_WOLF_ARMOR)) {
             ItemStack armor = wolf.getItemBySlot(EquipmentSlot.BODY);
             if (armor.is(ModItems.RESONANT_WOLF_ARMOR.get())) {
@@ -176,7 +170,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Player tick: helmet glow, leggings speed, shovel speed, shield cooldown ---
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -185,7 +178,6 @@ public class ResonanceEvents {
 
         ShatteredEchoEntity.trySpawnGeodeEncounter(level, player);
 
-        // Shield cooldown tick
         UUID id = player.getUUID();
         if (shieldCooldowns.containsKey(id)) {
             int remaining = shieldCooldowns.get(id) - 1;
@@ -197,7 +189,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Leggings: speed boost on stone/deepslate/amethyst ---
         ItemStack leggings = player.getItemBySlot(EquipmentSlot.LEGS);
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
@@ -210,7 +201,6 @@ public class ResonanceEvents {
             }
         }
 
-        // --- Shovel: resonant path stacking speed boost (up to +20%) ---
         if (speedAttr != null) {
             BlockPos playerPos = player.blockPosition();
             boolean onPath = (level.getBlockState(playerPos).is(Blocks.DIRT_PATH)
@@ -268,7 +258,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Resonance kill effects: Vibration Scar (50%) + Amethyst Bloom (10%) ---
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         LivingEntity dead = event.getEntity();
@@ -280,7 +269,6 @@ public class ResonanceEvents {
             trySpawnStalker(level, dead.blockPosition());
         }
 
-        // Vibration Scar: 50% chance on Resonance kill
         if (level.getRandom().nextFloat() < 0.50F) {
             BlockPos scarPos = dead.blockPosition();
             boolean wraith = VibrationScars.add(level, scarPos);
@@ -290,10 +278,8 @@ public class ResonanceEvents {
             }
         }
 
-        // Amethyst Bloom: 10% chance
         if (level.getRandom().nextFloat() >= 0.10F) return;
 
-        // Bloom: convert nearby stone/deepslate into amethyst, with a rare budding core
         BlockPos deathPos = dead.blockPosition();
         int planted = 0;
         boolean corePlaced = false;
@@ -324,7 +310,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Vibration Scars: battlefields shimmer for a while after resonant combat ---
     @SubscribeEvent
     public static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
@@ -374,19 +359,16 @@ public class ResonanceEvents {
             int nearby = nearbyCounts[scarIndex];
             float intensity = Math.min(1.0F, freshness + nearby * 0.1F);
 
-            // Scar point — dark crack mark on the ground with faint glow at edges
             if (level.getRandom().nextFloat() < 0.2F * intensity) {
                 level.sendParticles(crackDust, x, groundY + 0.02, z, 3, 0.15, 0.0, 0.15, 0.0);
                 level.sendParticles(glowDust, x, groundY + 0.03, z, 1, 0.2, 0.0, 0.2, 0.0);
             }
 
-            // Cluster escalation — soul fire seeping from cracks
             if (nearby >= 3 && level.getRandom().nextFloat() < 0.06F * intensity) {
                 level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, groundY + 0.02, z, 1, 0.1, 0.0, 0.1, 0.001);
                 level.sendParticles(ParticleTypes.SMOKE, x, groundY + 0.05, z, 1, 0.15, 0.02, 0.15, 0.002);
             }
 
-            // Heavy cluster — cracks pulsing with light + sound
             if (nearby >= 6 && level.getRandom().nextFloat() < 0.04F * intensity) {
                 level.sendParticles(brightDust, x, groundY + 0.03, z, 3, 0.2, 0.0, 0.2, 0.0);
                 level.sendParticles(ParticleTypes.REVERSE_PORTAL, x, groundY + 0.05, z, 2, 0.3, 0.05, 0.3, 0.01);
@@ -396,7 +378,6 @@ public class ResonanceEvents {
             }
         }
 
-        // Draw crack lines between nearby scar points
         for (long[] pair : scarPairs) {
             if (level.getRandom().nextFloat() > 0.12F) continue;
             BlockPos a = BlockPos.of(pair[0]);
@@ -416,7 +397,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Boots: reduce fall distance by 4 blocks ---
     @SubscribeEvent
     public static void onFall(LivingFallEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
@@ -434,7 +414,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Totem: apply Resonance III in 8-block area on use ---
     @SubscribeEvent
     public static void onTotemUse(LivingUseTotemEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
@@ -457,7 +436,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Pickaxe: 10% chance to chain-mine adjacent identical blocks ---
     @SubscribeEvent
     public static void onBlockBreak(BreakBlockEvent event) {
         Player player = event.getPlayer();
@@ -490,7 +468,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Hoe: crops grow 20% faster on harmonized farmland ---
     @SubscribeEvent
     public static void onCropGrow(CropGrowEvent.Pre event) {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
@@ -517,13 +494,11 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Mount/wolf armor: passive auras ---
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
         if (event.getEntity().level().isClientSide()) return;
         if (!(event.getEntity().level() instanceof ServerLevel level)) return;
 
-        // Wolf armor: attacks from the wolf apply Resonance, passive aura every 2s
         if (event.getEntity() instanceof Wolf wolf) {
             ItemStack bodyArmor = wolf.getItemBySlot(EquipmentSlot.BODY);
             if (!bodyArmor.is(ModItems.RESONANT_WOLF_ARMOR.get())) return;
@@ -543,7 +518,6 @@ public class ResonanceEvents {
             }
         }
 
-        // Horse armor
         if (event.getEntity() instanceof AbstractHorse horse) {
             ItemStack bodyArmor = horse.getItemBySlot(EquipmentSlot.BODY);
             if (!bodyArmor.is(ModItems.RESONANT_HORSE_ARMOR.get())) return;
@@ -563,13 +537,11 @@ public class ResonanceEvents {
             }
         }
 
-        // Nautilus armor
         if (event.getEntity() instanceof AbstractNautilus nautilus) {
             ItemStack bodyArmor = nautilus.getItemBySlot(EquipmentSlot.BODY);
             if (!bodyArmor.is(ModItems.RESONANT_NAUTILUS_ARMOR.get())) return;
             if (nautilus.tickCount % 40 != 0) return;
 
-            // Give rider Conduit Power
             if (nautilus.isInWater()) {
                 for (var passenger : nautilus.getPassengers()) {
                     if (passenger instanceof LivingEntity rider) {
@@ -578,7 +550,6 @@ public class ResonanceEvents {
                 }
             }
 
-            // Apply Resonance to nearby hostile mobs in water
             AABB area = nautilus.getBoundingBox().inflate(6.0);
             boolean hit = false;
             for (Monster mob : level.getEntitiesOfClass(Monster.class, area)) {
@@ -596,7 +567,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Sculk dampening: full Resonant armor suppresses vibrations ---
     @SubscribeEvent
     public static void onGameEvent(VanillaGameEvent event) {
         if (event.getCause() instanceof Player player && hasFullResonantArmor(player)) {
@@ -604,7 +574,6 @@ public class ResonanceEvents {
         }
     }
 
-    // --- Sculk weaponization: right-click sculk sensor with Resonant weapon to emit Resonance pulse ---
     @SubscribeEvent
     public static void onRightClickBlockSculk(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
@@ -635,7 +604,6 @@ public class ResonanceEvents {
                 15, 2.0, 1.0, 2.0, 0.05);
     }
 
-    // --- Helpers ---
 
     private static boolean hasFullResonantArmor(Player player) {
         return player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.RESONANT_HELMET.get())
@@ -665,7 +633,6 @@ public class ResonanceEvents {
                 || below.is(Blocks.BUDDING_AMETHYST);
     }
 
-    // --- Wraith Emergence ---
 
     private static class WraithEmergenceEvent {
         final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dimension;
@@ -685,7 +652,6 @@ public class ResonanceEvents {
 
     private static void playWraithEmergence(ServerLevel level, BlockPos center, java.util.List<BlockPos> scarPositions) {
         pendingEmergences.add(new WraithEmergenceEvent(level.dimension(), center, scarPositions));
-        // Stage 0 starts immediately on the next tick
     }
 
     private static void tickEmergences(ServerLevel level) {
@@ -704,7 +670,6 @@ public class ResonanceEvents {
 
             switch (e.stage) {
                 case 0 -> {
-                    // Stage 0: All scars glow bright — intense purple burst at each position
                     level.playSound(null, e.center, SoundEvents.BEACON_ACTIVATE, SoundSource.HOSTILE, 1.5F, 0.4F);
                     for (BlockPos scar : e.scarPositions) {
                         double x = scar.getX() + 0.5, z = scar.getZ() + 0.5;
@@ -717,7 +682,6 @@ public class ResonanceEvents {
                     e.ticksRemaining = 30; // 1.5 seconds
                 }
                 case 1 -> {
-                    // Stage 1: Cracks burst open — explosion particles, block break effects
                     level.playSound(null, e.center, ModSounds.CRYSTAL_WRAITH_ARMOR_BREAK.get(), SoundSource.HOSTILE, 1.4F, 0.72F);
                     level.playSound(null, e.center, SoundEvents.GLASS_BREAK, SoundSource.HOSTILE, 1.5F, 0.6F);
                     for (BlockPos scar : e.scarPositions) {
@@ -726,11 +690,9 @@ public class ResonanceEvents {
                         level.sendParticles(ParticleTypes.EXPLOSION, x, y + 0.2, z, 1, 0.0, 0.0, 0.0, 0.0);
                         level.sendParticles(brightPurple, x, y + 0.5, z, 20, 0.3, 0.5, 0.3, 0.05);
                         level.sendParticles(ParticleTypes.REVERSE_PORTAL, x, y + 0.3, z, 10, 0.2, 0.3, 0.2, 0.05);
-                        // Upward crystal shards from each crack
                         ItemParticleOption shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
                         level.sendParticles(shard, x, y + 0.2, z, 8, 0.2, 0.0, 0.2, 0.4);
                     }
-                    // Draw converging lines from all scars to center
                     double cx = e.center.getX() + 0.5, cz = e.center.getZ() + 0.5;
                     double cy = getScarGroundY(level, e.center);
                     for (BlockPos scar : e.scarPositions) {
@@ -749,24 +711,20 @@ public class ResonanceEvents {
                     e.ticksRemaining = 20; // 1 second
                 }
                 case 2 -> {
-                    // Stage 2: Crystal Wraith rises from the center
                     double cx = e.center.getX() + 0.5, cz = e.center.getZ() + 0.5;
                     double cy = getScarGroundY(level, e.center);
                     // The entity plays its custom emergence cue on its first tick,
                     // keeping fracture and spawn-egg Wraiths sonically consistent.
-                    // Rising column of particles
                     for (int y = 0; y < 12; y++) {
                         level.sendParticles(brightPurple, cx, cy + y * 0.25, cz, 5, 0.3, 0.0, 0.3, 0.0);
                         level.sendParticles(ParticleTypes.END_ROD, cx, cy + y * 0.25, cz, 2, 0.15, 0.0, 0.15, 0.02);
                     }
-                    // Burst ring at ground level
                     for (int i = 0; i < 36; i++) {
                         double angle = Math.toRadians(i * 10);
                         double rx = cx + Math.cos(angle) * 2.0;
                         double rz = cz + Math.sin(angle) * 2.0;
                         level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, rx, cy + 0.1, rz, 1, 0.0, 0.1, 0.0, 0.01);
                     }
-                    // Spawn the Wraith
                     var wraith = com.resonance.registry.ModEntities.CRYSTAL_WRAITH.get().create(level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
                     if (wraith != null) {
                         wraith.setPos(cx, cy, cz);

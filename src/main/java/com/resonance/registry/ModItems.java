@@ -79,7 +79,6 @@ public class ModItems {
     public static final DeferredItem<Item> AMETHYST_INGOT = ITEMS.registerSimpleItem("amethyst_ingot",
             () -> new Item.Properties());
 
-    // Tools
     public static final DeferredItem<Item> RESONANT_SWORD = ITEMS.registerItem("resonant_sword",
             ResonantSwordItem::new,
             () -> new Item.Properties().sword(RESONANT_MATERIAL, 3.0F, -2.4F));
@@ -105,7 +104,6 @@ public class ModItems {
             () -> new Item.Properties().spear(RESONANT_MATERIAL,
                     0.95F, 0.95F, 0.6F, 2.5F, 11.0F, 6.75F, 5.1F, 11.25F, 4.6F));
 
-    // Horse, Nautilus & Wolf Armor
     public static final DeferredItem<Item> RESONANT_HORSE_ARMOR = ITEMS.registerItem("resonant_horse_armor",
             TooltipItem::new,
             () -> new Item.Properties().horseArmor(RESONANT_MOUNT_MATERIAL)
@@ -120,7 +118,6 @@ public class ModItems {
             TooltipItem::new,
             () -> new Item.Properties().wolfArmor(RESONANT_MOUNT_MATERIAL));
 
-    // Totem
     public static final DeferredItem<Item> RESONANT_TOTEM = ITEMS.registerItem("resonant_totem",
             com.resonance.item.ResonantTotemItem::new,
             () -> new Item.Properties()
@@ -129,12 +126,10 @@ public class ModItems {
                     .component(net.minecraft.core.component.DataComponents.DEATH_PROTECTION,
                             net.minecraft.world.item.component.DeathProtection.TOTEM_OF_UNDYING));
 
-    // Arrow
     public static final DeferredItem<Item> RESONANT_ARROW = ITEMS.registerItem("resonant_arrow",
             ResonantArrowItem::new,
             () -> new Item.Properties());
 
-    // Armor
     public static final DeferredItem<Item> RESONANT_HELMET = ITEMS.registerItem("resonant_helmet",
             ResonantArmorItem::new,
             () -> new Item.Properties().humanoidArmor(RESONANT_ARMOR_MATERIAL, ArmorType.HELMET));
@@ -151,7 +146,6 @@ public class ModItems {
             ResonantArmorItem::new,
             () -> new Item.Properties().humanoidArmor(RESONANT_ARMOR_MATERIAL, ArmorType.BOOTS));
 
-    // Mob drops
     public static final DeferredItem<Item> HARMONIC_FRAGMENT = ITEMS.registerItem("harmonic_fragment",
             TooltipItem::new,
             () -> new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON));
@@ -168,7 +162,6 @@ public class ModItems {
     public static final DeferredItem<Item> CRYSTAL_SHARD_PROJECTILE = ITEMS.registerItem("crystal_shard_projectile",
             Item::new, Item.Properties::new);
 
-    // Spawn eggs
     public static final DeferredItem<Item> SHATTERED_ECHO_SPAWN_EGG = ITEMS.registerItem("shattered_echo_spawn_egg",
             net.minecraft.world.item.SpawnEggItem::new,
             () -> new Item.Properties().spawnEgg(ModEntities.SHATTERED_ECHO.get()));
@@ -193,7 +186,6 @@ public class ModItems {
             TooltipItem::new,
             () -> new Item.Properties());
 
-    // Crystal rabbit food
     public static final DeferredItem<Item> RAW_CRYSTAL_RABBIT = ITEMS.registerSimpleItem("raw_crystal_rabbit",
             () -> new Item.Properties().food(RAW_CRYSTAL_RABBIT_FOOD));
 
