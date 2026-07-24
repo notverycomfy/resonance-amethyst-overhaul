@@ -228,7 +228,6 @@ public class TheHarmonicEntity extends Mob {
         };
     }
 
-    // --- Phase 1: Crystal Barrage (100%-70%) ---
     private void tickPhase1(ServerLevel level, float healthPercent) {
         if (healthPercent <= 0.7F) {
             beginTransition(level, 2);
@@ -242,7 +241,6 @@ public class TheHarmonicEntity extends Mob {
         }
     }
 
-    // --- Phase 2: Minion Phase ---
     private void tickPhase2(ServerLevel level) {
         if (loadGraceTicks > 0) {
             loadGraceTicks--;
@@ -303,7 +301,6 @@ public class TheHarmonicEntity extends Mob {
                 SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 1.5F, 1.2F);
     }
 
-    // --- Phase 3: Shatter Storm (70%-40%) ---
     private void tickPhase3(ServerLevel level, float healthPercent) {
         if (healthPercent <= 0.4F) {
             beginTransition(level, 4);
@@ -344,7 +341,6 @@ public class TheHarmonicEntity extends Mob {
         spikeActive = true;
         spikeAnimTimer = 0;
 
-        // Warning rumble before the crystals surface beneath every arena player.
         for (BlockPos center : spikeCenters) {
             level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.HOSTILE, 2.0F, 0.4F);
         }
@@ -359,7 +355,6 @@ public class TheHarmonicEntity extends Mob {
             return;
         }
 
-        // Crystals rise out of the ground, peak mid-animation, then sink back in
         float progress = (float) spikeAnimTimer / SPIKE_ANIM_DURATION;
         float height = Mth.sin(progress * Mth.PI) * 2.5F;
 
@@ -369,7 +364,6 @@ public class TheHarmonicEntity extends Mob {
                 for (int dz = -1; dz <= 1; dz++) {
                     double px = center.getX() + 0.5 + dx + (this.random.nextDouble() - 0.5) * 0.4;
                     double pz = center.getZ() + 0.5 + dz + (this.random.nextDouble() - 0.5) * 0.4;
-                    // Column of shards from the ground up to the current spike height
                     double columnHeight = height * (0.6 + this.random.nextDouble() * 0.4);
                     for (double y = 0; y <= columnHeight; y += 0.5) {
                         level.sendParticles(shardParticle,
@@ -379,7 +373,6 @@ public class TheHarmonicEntity extends Mob {
             }
         }
 
-        // Eruption peak: damage + knockup
         if (spikeAnimTimer == SPIKE_ANIM_DURATION / 2) {
             Set<UUID> hitPlayers = new HashSet<>();
             for (BlockPos center : spikeCenters) {
@@ -395,7 +388,6 @@ public class TheHarmonicEntity extends Mob {
         }
     }
 
-    // --- Phase 4: Final Phase (40%-0%) ---
     private void tickPhase4(ServerLevel level) {
         if (loadGraceTicks > 0) {
             loadGraceTicks--;
@@ -507,7 +499,6 @@ public class TheHarmonicEntity extends Mob {
         return topY;
     }
 
-    // --- Crystal Rain: telegraphed zones over each player, then falling shards ---
     private static final int RAIN_TELEGRAPH_TICKS = 25;
     private static final int RAIN_DURATION = 50;
     private static final double RAIN_ZONE_RADIUS = 3.0;
@@ -536,7 +527,6 @@ public class TheHarmonicEntity extends Mob {
         }
 
         if (rainTimer <= RAIN_TELEGRAPH_TICKS) {
-            // Telegraph: a spark ring marks each impact zone on the ground
             for (Vec3 zone : rainZones) {
                 int segments = 20;
                 for (int i = 0; i < segments; i++) {
@@ -553,7 +543,6 @@ public class TheHarmonicEntity extends Mob {
                         SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.HOSTILE, 2.0F, 0.6F);
             }
         } else if (rainTimer % 3 == 0) {
-            // Rain: shards fall from above into each zone
             for (Vec3 zone : rainZones) {
                 double angle = this.random.nextDouble() * Mth.TWO_PI;
                 double r = this.random.nextDouble() * RAIN_ZONE_RADIUS;
@@ -587,7 +576,6 @@ public class TheHarmonicEntity extends Mob {
         shockwaveRadius = 1.0F;
         shockwaveHitPlayers.clear();
 
-        // Warning cue so the player knows a wave is coming
         level.playSound(null, this.getX(), this.getY(), this.getZ(),
                 SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 2.0F, 0.4F);
         level.playSound(null, this.getX(), this.getY(), this.getZ(),
@@ -604,7 +592,6 @@ public class TheHarmonicEntity extends Mob {
 
         double groundY = groundHeight();
 
-        // Crisp ring on the ground — short-lived particles so no trail is left behind
         int segments = Math.max(16, (int)(shockwaveRadius * 6));
         for (int i = 0; i < segments; i++) {
             double angle = (i / (double) segments) * Mth.TWO_PI;
@@ -620,7 +607,6 @@ public class TheHarmonicEntity extends Mob {
                     0.5F + shockwaveRadius * 0.02F);
         }
 
-        // Only players standing on the ground where the ring currently is get hit
         List<Player> players = level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(22));
         for (Player player : players) {
             if (shockwaveHitPlayers.contains(player.getUUID())) continue;
@@ -639,11 +625,9 @@ public class TheHarmonicEntity extends Mob {
     }
 
     private double groundHeight() {
-        // Boss floats 2 blocks above the arena floor at its anchor position
         return (anchorPos != null ? anchorPos.y : this.getY()) - 2.0;
     }
 
-    // --- Shared attack ---
     private void crystalBarrage(ServerLevel level, int count) {
         List<Player> targets = getArenaPlayers(level);
         if (targets.isEmpty()) return;
@@ -672,7 +656,6 @@ public class TheHarmonicEntity extends Mob {
                 player -> player.isAlive() && !player.isSpectator());
     }
 
-    // --- Phase Transitions ---
     private void beginTransition(ServerLevel level, int newPhase) {
         pendingPhase = newPhase;
         transitionTimer = TRANSITION_DURATION;
@@ -754,7 +737,6 @@ public class TheHarmonicEntity extends Mob {
         }
     }
 
-    // --- Damage ---
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         // Block environmental damage, but let /kill and creative-mode hits through
@@ -801,7 +783,6 @@ public class TheHarmonicEntity extends Mob {
         super.die(source);
         if (this.level() instanceof ServerLevel serverLevel) {
             cleanupAnchors(serverLevel);
-            // The Harmonic's death seeds the crystal forest
             com.resonance.data.CrystalForestSpreadData.get(serverLevel).startSpread(this.blockPosition());
         }
     }
@@ -830,7 +811,6 @@ public class TheHarmonicEntity extends Mob {
         this.discard();
     }
 
-    // --- Movement locks ---
     @Override
     public void push(Entity entity) {}
 
@@ -842,7 +822,6 @@ public class TheHarmonicEntity extends Mob {
         return false;
     }
 
-    // --- Client particles ---
     private void clientParticles() {
         float phase = getPhase();
         int particleCount = (int)(phase * 2);
@@ -868,7 +847,6 @@ public class TheHarmonicEntity extends Mob {
         }
     }
 
-    // --- Boss bar ---
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
         super.startSeenByPlayer(player);
@@ -881,7 +859,6 @@ public class TheHarmonicEntity extends Mob {
         if (bossEvent != null) bossEvent.removePlayer(player);
     }
 
-    // --- Save/Load ---
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
@@ -953,7 +930,6 @@ public class TheHarmonicEntity extends Mob {
         this.loadGraceTicks = 100;
     }
 
-    // --- Sounds ---
     @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.AMETHYST_BLOCK_RESONATE;
