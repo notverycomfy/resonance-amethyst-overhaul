@@ -37,12 +37,16 @@ import com.resonance.fabric.registry.DeferredRegister;
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Resonance.MODID);
 
+    private static final boolean CRYSTAL_DOORS_OPEN_BY_HAND = true;
+    private static final boolean CRYSTAL_DOORS_OPEN_BY_WIND_CHARGE = true;
+    private static final boolean CRYSTAL_BUTTONS_ACTIVATE_FROM_ARROWS = true;
+
     /** Crystal controls keep the wooden behavior while using one sound palette. */
     private static final BlockSetType CRYSTAL_BLOCK_SET = new BlockSetType(
             "resonance:crystal",
-            true,
-            true,
-            true,
+            CRYSTAL_DOORS_OPEN_BY_HAND,
+            CRYSTAL_DOORS_OPEN_BY_WIND_CHARGE,
+            CRYSTAL_BUTTONS_ACTIVATE_FROM_ARROWS,
             BlockSetType.PressurePlateSensitivity.EVERYTHING,
             SoundType.AMETHYST,
             SoundType.AMETHYST.getBreakSound(),

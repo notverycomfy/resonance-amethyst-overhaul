@@ -160,7 +160,7 @@ public class CrystalWraithModel extends EntityModel<CrystalWraithRenderState> {
                 CubeListBuilder.create().texOffs(48, 32)
                         .addBox(-1.5F, 0.0F, -1.5F, 3.0F, 6.0F, 3.0F),
                 PartPose.offsetAndRotation(0.0F, 6.0F, -0.25F, -0.18F, 0.0F, 0.16F));
-        addClawedHand(leftForearm, "hand", 72, 32, false);
+        addClawedHand(leftForearm, "hand", 72, 32, HandSide.LEFT);
 
         PartDefinition rightArm = wraith.addOrReplaceChild("right_arm",
                 CubeListBuilder.create().texOffs(40, 32)
@@ -170,7 +170,7 @@ public class CrystalWraithModel extends EntityModel<CrystalWraithRenderState> {
                 CubeListBuilder.create().texOffs(60, 32)
                         .addBox(-1.5F, 0.0F, -1.5F, 3.0F, 6.0F, 3.0F),
                 PartPose.offsetAndRotation(0.0F, 6.0F, 0.25F, -0.1F, 0.0F, -0.12F));
-        addClawedHand(rightForearm, "hand", 84, 32, true);
+        addClawedHand(rightForearm, "hand", 84, 32, HandSide.RIGHT);
 
         // The body ends in uneven strips instead of feet.
         wraith.addOrReplaceChild("pelvis",
@@ -193,12 +193,12 @@ public class CrystalWraithModel extends EntityModel<CrystalWraithRenderState> {
         return LayerDefinition.create(mesh, 128, 128);
     }
 
-    private static void addClawedHand(PartDefinition forearm, String name, int u, int v, boolean mirrored) {
+    private static void addClawedHand(PartDefinition forearm, String name, int u, int v, HandSide handSide) {
         PartDefinition hand = forearm.addOrReplaceChild(name,
                 CubeListBuilder.create().texOffs(u, v)
                         .addBox(-1.5F, 0.0F, -1.5F, 3.0F, 2.0F, 3.0F),
                 PartPose.offset(0.0F, 6.05F, 0.0F));
-        float side = mirrored ? -1.0F : 1.0F;
+        float side = handSide == HandSide.RIGHT ? -1.0F : 1.0F;
         hand.addOrReplaceChild("inner_claw",
                 CubeListBuilder.create().texOffs(96, 32)
                         .addBox(-0.5F, 0.0F, -0.5F, 1.0F, 3.0F, 1.0F),
@@ -211,6 +211,11 @@ public class CrystalWraithModel extends EntityModel<CrystalWraithRenderState> {
                 CubeListBuilder.create().texOffs(96, 32)
                         .addBox(-0.5F, 0.0F, -0.5F, 1.0F, 3.0F, 1.0F),
                 PartPose.offsetAndRotation(side, 1.25F, -0.5F, -0.28F, 0.0F, -side * 0.16F));
+    }
+
+    private enum HandSide {
+        LEFT,
+        RIGHT
     }
 
     @Override
