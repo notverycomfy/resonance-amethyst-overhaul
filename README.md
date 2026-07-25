@@ -5,23 +5,22 @@
 <h1 align="center">Resonance — Amethyst Overhaul</h1>
 
 <p align="center">
-  <strong>Echoes of the Past</strong><br>
-  A progression-driven Minecraft adventure built around amethyst, sound, and the memories buried inside geodes.
+  <strong>An Amethyst Adventure Overhaul</strong><br>
+  Crystal biomes, creatures, equipment, and Resonance-powered combat.
 </p>
 
 <p align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/resonance-amethyst-overhaul"><img alt="Download on CurseForge" src="https://img.shields.io/badge/Download-CurseForge-F16436?logo=curseforge&logoColor=white"></a>
   <a href="https://modrinth.com/mod/resonance-amethyst-overhaul"><img alt="Download on Modrinth" src="https://img.shields.io/badge/Download-Modrinth-00AF5C?logo=modrinth&logoColor=white"></a>
-  <img alt="Minecraft 26.1.2 and 26.2" src="https://img.shields.io/badge/Minecraft-26.1.2%20%7C%2026.2-62B47A">
   <img alt="NeoForge and Fabric" src="https://img.shields.io/badge/Loaders-NeoForge%20%7C%20Fabric-EF7C24">
   <a href="LICENSE"><img alt="All Rights Reserved" src="https://img.shields.io/badge/License-All%20Rights%20Reserved-blue"></a>
 </p>
 
 > **Official downloads are available only from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/resonance-amethyst-overhaul) and [Modrinth](https://modrinth.com/mod/resonance-amethyst-overhaul).** GitHub is used for source code, documentation, and issue tracking; release files are not distributed here.
 
-## Echoes of the Past
+## About
 
-Amethyst remembers every impact, every creature, and every battle. Resonance turns that idea into a complete progression path: repeated strikes build power, sweeping attacks carry it through groups, and defeated resonating creatures may fracture into dangerous echoes.
+Resonance expands amethyst into a full progression system. Build Resonance through combat, explore calcite-rich geodes and the Crystal Forest, craft new equipment, and face the creatures drawn to the growing frequency.
 
 Follow those echoes into calcite-rich geodes and the Crystal Forest, craft new equipment, discover unfamiliar crystal life, and uncover what has been waiting beneath the world.
 
