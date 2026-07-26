@@ -5,17 +5,21 @@ import com.resonance.client.model.ShatteredEchoModel;
 import com.resonance.client.model.TheHarmonicModel;
 import com.resonance.registry.ModBlockEntities;
 import com.resonance.registry.ModEntities;
+import com.resonance.registry.ModSounds;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import com.resonance.entity.TheHarmonicEntity;
-import net.minecraft.sounds.Musics;
+import net.minecraft.sounds.Music;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 
 public final class ClientEvents {
+    private static final Music HARMONIC_MUSIC =
+            new Music(ModSounds.HARMONIC_BOSS_MUSIC, 0, 0, true);
+
     private ClientEvents() {
     }
 
@@ -51,11 +55,11 @@ public final class ClientEvents {
                 }
             }
             if (harmonicNearby) {
-                if (!minecraft.getMusicManager().isPlayingMusic(Musics.END_BOSS)) {
-                    minecraft.getMusicManager().startPlaying(Musics.END_BOSS);
+                if (!minecraft.getMusicManager().isPlayingMusic(HARMONIC_MUSIC)) {
+                    minecraft.getMusicManager().startPlaying(HARMONIC_MUSIC);
                 }
-            } else if (minecraft.getMusicManager().isPlayingMusic(Musics.END_BOSS)) {
-                minecraft.getMusicManager().stopPlaying(Musics.END_BOSS);
+            } else if (minecraft.getMusicManager().isPlayingMusic(HARMONIC_MUSIC)) {
+                minecraft.getMusicManager().stopPlaying(HARMONIC_MUSIC);
             }
         });
     }

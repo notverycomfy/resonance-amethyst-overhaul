@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -141,15 +142,22 @@ public class CrystalWraithEntity extends Monster {
         if (isEmerging()) return false;
         if (!isArmorBroken()) {
             crystalArmor -= amount;
+            this.hurtDuration = 10;
+            this.hurtTime = this.hurtDuration;
+            level.broadcastDamageEvent(this, source);
+
             var shard = new ItemParticleOption(ParticleTypes.ITEM, Items.AMETHYST_SHARD);
             level.sendParticles(shard, getX(), getY() + getBbHeight() * 0.5, getZ(),
                     6, 0.3, 0.3, 0.3, 0.3);
-            playSound(ModSounds.CRYSTAL_WRAITH_HURT.get(), 1.2F, 0.92F + random.nextFloat() * 0.16F);
+            level.playSound(null, blockPosition(), ModSounds.CRYSTAL_WRAITH_HURT.get(),
+                    SoundSource.HOSTILE, 1.2F, 0.92F + random.nextFloat() * 0.16F);
+            level.playSound(null, blockPosition(), SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundSource.HOSTILE, 1.0F, 0.82F + random.nextFloat() * 0.12F);
 
             if (crystalArmor <= 0) {
                 breakCrystalArmor(level);
             }
-            return false;
+            return true;
         }
         return super.hurtServer(level, source, amount);
     }
