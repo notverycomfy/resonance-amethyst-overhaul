@@ -26,6 +26,14 @@
       "minecraft:block/amethyst/shimmer"
     ]
   },
+  "music.harmonic": {
+    "sounds": [
+      {
+        "name": "resonance:music/the_harmonic",
+        "stream": true
+      }
+    ]
+  },
   "stalker_laugh": {
     "sounds": [
       "resonance:entity/resonant_stalker/laugh"

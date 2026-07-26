@@ -47,10 +47,10 @@ public class HarmonicArenaStructure extends Structure {
             }
         }
 
-        // Require most of the footprint to be over terrain
-        if (valid < 4) return Optional.empty();
-
-        int y = sum / valid;
+        // The Crystallized End only occupies a finite ring. Do not reject an
+        // eligible structure-set position here, or /locate can search forever
+        // after every candidate in that ring has been discarded.
+        int y = valid > 0 ? sum / valid : 64;
         BlockPos center = new BlockPos(x, y, z);
         return Optional.of(new GenerationStub(center, (builder) -> {
             builder.addPiece(new HarmonicArenaPiece(center));

@@ -22,6 +22,9 @@ public class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> HARMONIC_SHIELD_RECHARGE = SOUND_EVENTS.register("harmonic_shield_recharge",
             () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Resonance.MODID, "harmonic_shield_recharge")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> HARMONIC_BOSS_MUSIC = SOUND_EVENTS.register("music.harmonic",
+            () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Resonance.MODID, "music.harmonic")));
+
     public static final DeferredHolder<SoundEvent, SoundEvent> STALKER_LAUGH = SOUND_EVENTS.register("stalker_laugh",
             () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Resonance.MODID, "stalker_laugh")));
 
