@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.2
+
+- Fixed The Harmonic boss-fight music not playing.
+- Fixed attacks against the Crystal Wraith's active armor feeling like they failed to connect.
+- Fixed the Crystal Wraith hit sound using the wrong audio.
+- Fixed Fabric items appearing in different creative-tab positions than their NeoForge versions.
+- Fixed `/locate` searches for the Harmonic Arena freezing on affected world seeds.
+- Placeholder music while boss track is being developed (Music by UniqueCreativeAudio).
+
 ## 1.0.0 - 2026-07-22
 
 - Added the complete Resonant equipment and armor progression.
@@ -17,3 +26,10 @@
 - Added immediate, encounter-aware boss music for The Harmonic that cleanly yields back to normal music after the fight.
 - Completed a four-version consistency audit, corrected 26.2 Harmonic advancement predicates, removed the obsolete global recipe unlock, and normalized armor model JSON encoding.
 - Completed multiplayer state synchronization, persistence hardening, performance cleanup, texture consistency, and release validation.
+- Added complete NeoForge and Fabric support for Minecraft 26.1.2 and 26.2.
+- Corrected Fabric creative-tab placement and removed duplicate entries.
+- Changed recipe-book progression so Resonance recipes unlock after discovering amethyst instead of automatically on joining a world.
+- Fixed Fabric Resonant attacks canceling vanilla hit completion, restoring tool durability, sword sweeping attacks, and critical hits.
+- Reduced Shattered Echo encounter rolls to once per minute per player at a 50% chance.
+- Added the missing Fabric Resonant Stalker encounter roll while preserving its intended 1% chance across loaders.
+- Split recipe-book unlocks by discovered ingredient and separated crystal wood recipes from vanilla wood recipe groups.
