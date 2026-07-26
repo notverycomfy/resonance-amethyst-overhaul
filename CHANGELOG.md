@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.2
+
+- Fixed The Harmonic boss-fight music not playing.
+- Fixed attacks against the Crystal Wraith's active armor feeling like they failed to connect.
+- Fixed the Crystal Wraith hit sound using the wrong audio.
+- Fixed Fabric items appearing in different creative-tab positions than their NeoForge versions.
+- Fixed `/locate` searches for the Harmonic Arena freezing on affected world seeds.
+- Placeholder music while boss track is being developed (Music by UniqueCreativeAudio).
+
 ## 1.0.0 - 2026-07-22
 
 - Added the complete Resonant equipment and armor progression.

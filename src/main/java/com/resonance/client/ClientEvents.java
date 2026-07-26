@@ -6,11 +6,13 @@ import com.resonance.client.model.ShatteredEchoModel;
 import com.resonance.client.model.TheHarmonicModel;
 import com.resonance.entity.TheHarmonicEntity;
 import com.resonance.registry.ModEntities;
+import com.resonance.registry.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.sounds.Musics;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.Music;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -21,6 +23,10 @@ import net.neoforged.neoforge.client.event.SelectMusicEvent;
 public class ClientEvents {
 
     private static final double HARMONIC_MUSIC_RANGE_SQR = 128.0 * 128.0;
+    private static final Identifier HARMONIC_MUSIC_ID =
+            Identifier.fromNamespaceAndPath(Resonance.MODID, "music.harmonic");
+    private static final Music HARMONIC_MUSIC =
+            new Music(ModSounds.HARMONIC_BOSS_MUSIC, 0, 0, true);
 
     @SubscribeEvent
     public static void selectBossMusic(SelectMusicEvent event) {
@@ -29,16 +35,21 @@ public class ClientEvents {
             return;
         }
 
+        boolean bossNearby = false;
         for (var entity : minecraft.level.entitiesForRendering()) {
             if (entity instanceof TheHarmonicEntity boss
                     && boss.isAlive()
                     && boss.distanceToSqr(minecraft.player) <= HARMONIC_MUSIC_RANGE_SQR) {
-                // Uses Minecraft's dedicated boss score through the Music
-                // channel, replacing ambient music immediately and ending
-                // automatically once the encounter is no longer present.
-                event.overrideMusic(Musics.END_BOSS);
-                return;
+                bossNearby = true;
+                break;
             }
+        }
+
+        if (bossNearby) {
+            event.overrideMusic(HARMONIC_MUSIC);
+        } else if (event.getPlayingMusic() != null
+                && HARMONIC_MUSIC_ID.equals(event.getPlayingMusic().getIdentifier())) {
+            event.overrideMusic(null);
         }
     }
 
