@@ -9,15 +9,13 @@ import com.resonance.registry.ModSounds;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import com.resonance.entity.TheHarmonicEntity;
 import net.minecraft.sounds.Music;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 
 public final class ClientEvents {
-    private static final Music HARMONIC_MUSIC =
+    public static final Music HARMONIC_MUSIC =
             new Music(ModSounds.HARMONIC_BOSS_MUSIC.holder(), 0, 0, true);
 
     private ClientEvents() {
@@ -42,25 +40,5 @@ public final class ClientEvents {
         ModelLayerRegistry.registerModelLayer(CrystalWraithRenderer.LAYER, CrystalWraithModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(TheHarmonicRenderer.LAYER, TheHarmonicModel::createBodyLayer);
 
-        ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            if (minecraft.level == null || minecraft.player == null) {
-                return;
-            }
-            boolean harmonicNearby = false;
-            for (var entity : minecraft.level.entitiesForRendering()) {
-                if (entity instanceof TheHarmonicEntity boss && boss.isAlive()
-                        && boss.distanceToSqr(minecraft.player) <= 128.0 * 128.0) {
-                    harmonicNearby = true;
-                    break;
-                }
-            }
-            if (harmonicNearby) {
-                if (!minecraft.getMusicManager().isPlayingMusic(HARMONIC_MUSIC)) {
-                    minecraft.getMusicManager().startPlaying(HARMONIC_MUSIC);
-                }
-            } else if (minecraft.getMusicManager().isPlayingMusic(HARMONIC_MUSIC)) {
-                minecraft.getMusicManager().stopPlaying(HARMONIC_MUSIC);
-            }
-        });
     }
 }
