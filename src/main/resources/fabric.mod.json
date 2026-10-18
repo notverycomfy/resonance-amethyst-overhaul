@@ -16,6 +16,7 @@
     "main": ["com.resonance.Resonance"],
     "client": ["com.resonance.ResonanceClient"]
   },
+  "mixins": ["resonance.mixins.json"],
   "depends": {
     "fabricloader": ">=0.19.3",
     "minecraft": "~${minecraft_version}",
