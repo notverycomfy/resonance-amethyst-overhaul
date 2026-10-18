@@ -1,6 +1,5 @@
 package com.resonance.block;
 
-import com.mojang.serialization.MapCodec;
 import com.resonance.block.entity.FrequencyRelayBlockEntity;
 import com.resonance.event.RelayLinkingHandler;
 import com.resonance.registry.ModBlockEntities;
@@ -31,7 +30,6 @@ public class FrequencyRelayBlock extends BaseEntityBlock {
             Block.box(0, 0, 0, 16, 6, 16),
             Block.box(6, 6, 6, 10, 12, 10)
     );
-    public static final MapCodec<FrequencyRelayBlock> CODEC = simpleCodec(FrequencyRelayBlock::new);
 
     public FrequencyRelayBlock(Properties properties) {
         super(properties);
@@ -43,10 +41,6 @@ public class FrequencyRelayBlock extends BaseEntityBlock {
         builder.add(ACTIVE);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {

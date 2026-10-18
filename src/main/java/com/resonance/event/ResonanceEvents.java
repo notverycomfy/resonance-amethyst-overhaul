@@ -2,7 +2,6 @@ package com.resonance.event;
 
 import com.resonance.Config;
 import com.resonance.Resonance;
-import com.resonance.block.CrystalLogBlock;
 import com.resonance.data.HarmonizedFarmlandData;
 import com.resonance.data.ResonantPathData;
 import com.resonance.data.VibrationScars;
@@ -40,11 +39,8 @@ import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -422,35 +418,6 @@ public final class ResonanceEvents {
         BlockPos pos = hit.getBlockPos();
         BlockState state = level.getBlockState(pos);
         ItemStack held = player.getItemInHand(hand);
-        BlockState replacement = null;
-
-        if (held.getItem() instanceof AxeItem && state.getBlock() instanceof CrystalLogBlock log) {
-            replacement = log.getStrippedState(state);
-        } else if (held.getItem() instanceof ShovelItem && isCrystalDirt(state)) {
-            replacement = ModBlocks.CRYSTAL_DIRT_PATH.get().defaultBlockState();
-            if (held.is(ModItems.RESONANT_SHOVEL.get())) {
-                ResonantPathData.get(server).add(pos);
-            }
-        } else if (held.getItem() instanceof HoeItem) {
-            if (state.is(ModBlocks.COARSE_CRYSTAL_DIRT.get()) || state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get())) {
-                replacement = ModBlocks.CRYSTAL_DIRT.get().defaultBlockState();
-                if (state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get())) {
-                    Block.popResource(level, pos, new ItemStack(Items.HANGING_ROOTS));
-                }
-            } else if (state.is(ModBlocks.CRYSTAL_DIRT.get()) || state.is(ModBlocks.CRYSTAL_GRASS_BLOCK.get())) {
-                replacement = ModBlocks.CRYSTAL_FARMLAND.get().defaultBlockState();
-                if (held.is(ModItems.RESONANT_HOE.get())) {
-                    HarmonizedFarmlandData.get(server).add(pos);
-                }
-            }
-        }
-
-        if (replacement != null) {
-            level.setBlockAndUpdate(pos, replacement);
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-            return InteractionResult.SUCCESS;
-        }
-
         if (state.getBlock() instanceof SculkSensorBlock
                 && (held.is(ModItems.RESONANT_SWORD.get()) || held.is(ModItems.RESONANT_AXE.get())
                 || held.is(ModItems.RESONANT_SPEAR.get()))) {
@@ -497,11 +464,6 @@ public final class ResonanceEvents {
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     8, 0.5, 0.5, 0.5, 0.05);
         }
-    }
-
-    private static boolean isCrystalDirt(BlockState state) {
-        return state.is(ModBlocks.CRYSTAL_DIRT.get()) || state.is(ModBlocks.CRYSTAL_GRASS_BLOCK.get())
-                || state.is(ModBlocks.COARSE_CRYSTAL_DIRT.get()) || state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get());
     }
 
     private static boolean isMarkedPath(ServerLevel level, BlockPos pos) {

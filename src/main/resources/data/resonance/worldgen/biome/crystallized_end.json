@@ -23,29 +23,34 @@
     ]
   ],
   "has_precipitation": false,
-  "spawn_costs": {},
-  "spawners": {
-    "ambient": [],
-    "axolotls": [],
-    "creature": [],
-    "misc": [],
-    "monster": [
-      {
-        "type": "minecraft:enderman",
-        "maxCount": 4,
-        "minCount": 4,
-        "weight": 10
+  "temperature": 0.5,
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [],
+          "misc": [],
+          "monster": [
+            {
+              "type": "minecraft:enderman",
+              "weight": 10,
+              "count": 4
+            },
+            {
+              "type": "resonance:crystal_sentinel",
+              "weight": 3,
+              "count": 1
+            }
+          ],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
       },
-      {
-        "type": "resonance:crystal_sentinel",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 3
-      }
-    ],
-    "underground_water_creature": [],
-    "water_ambient": [],
-    "water_creature": []
-  },
-  "temperature": 0.5
+      "modifier": "overlay"
+    }
+  }
 }

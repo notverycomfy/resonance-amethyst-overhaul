@@ -1,10 +1,10 @@
 package com.resonance;
 
-import com.resonance.event.BrewingRecipeHandler;
 import com.resonance.event.CrystalForestEvents;
 import com.resonance.event.ModBusEvents;
 import com.resonance.event.ResonanceEvents;
 import com.resonance.registry.ModBlockEntities;
+import com.resonance.registry.ModBlockTransformations;
 import com.resonance.registry.ModBlocks;
 import com.resonance.registry.ModEffects;
 import com.resonance.registry.ModEntities;
@@ -30,10 +30,10 @@ public final class Resonance implements ModInitializer {
     @Override
     public void onInitialize() {
         bootstrapRegistries();
+        ModBlockTransformations.register();
         ModBusEvents.register();
         ResonanceEvents.register();
         CrystalForestEvents.register();
-        BrewingRecipeHandler.register();
         ModLootModifiers.register();
         registerCreativeTabs();
     }

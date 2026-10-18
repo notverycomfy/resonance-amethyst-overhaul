@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.3
+
+- Added Minecraft 26.3 support for NeoForge and Fabric.
+- Updated crystal world generation, biome effects, brewing recipes, loot, and advancements for Minecraft 26.3.
+- Updated crystal tool interactions and rendering for Minecraft 26.3.
+- Fixed Fabric loading its gameplay and client mixins, including boss music.
+- Fixed boss music continuing after leaving the encounter.
+
 ## 1.0.2
 
 - Fixed The Harmonic boss-fight music not playing.

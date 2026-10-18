@@ -55,11 +55,11 @@ public class CrystalShardRenderer extends EntityRenderer<CrystalShardEntity, Cry
         // second perpendicular plane so the projectile has a stable crystal
         // silhouette from every camera angle instead of behaving like a
         // billboarded item sprite.
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.xRot));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(-state.xRot));
+        poseStack.rotate(Axis.ZP.rotationDegrees(-45.0F));
         state.item.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+        poseStack.rotate(Axis.XP.rotationDegrees(90.0F));
         state.item.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
         super.submit(state, poseStack, submitNodeCollector, camera);

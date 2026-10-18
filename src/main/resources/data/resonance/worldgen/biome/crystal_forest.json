@@ -2,23 +2,9 @@
   "carvers": [],
   "downfall": 0.8,
   "effects": {
-    "fog_color": "#d8b5e0",
-    "sky_color": "#c98fd6",
     "water_color": "#5db7ef",
-    "water_fog_color": "#5db7ef",
     "grass_color": "#b6db61",
-    "foliage_color": "#b6db61",
-    "particle": {
-      "options": { "type": "minecraft:end_rod" },
-      "probability": 0.003
-    },
-    "mood_sound": {
-      "sound": "minecraft:block.amethyst_block.resonate",
-      "tick_delay": 4000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "ambient_sound": "minecraft:block.amethyst_block.chime"
+    "foliage_color": "#b6db61"
   },
   "features": [
     [],
@@ -35,29 +21,62 @@
     ]
   ],
   "has_precipitation": false,
-  "spawn_costs": {},
-  "spawners": {
-    "ambient": [],
-    "axolotls": [],
-    "creature": [
+  "temperature": 0.7,
+  "attributes": {
+    "minecraft:visual/fog_color": "#d8b5e0",
+    "minecraft:visual/sky_color": "#c98fd6",
+    "minecraft:visual/water_fog_color": "#5db7ef",
+    "minecraft:visual/ambient_particles": [
       {
-        "type": "resonance:crystal_rabbit",
-        "maxCount": 3,
-        "minCount": 2,
-        "weight": 10
-      },
-      {
-        "type": "resonance:crystal_armadillo",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 8
+        "particle": {
+          "type": "minecraft:end_rod"
+        },
+        "probability": 0.003
       }
     ],
-    "misc": [],
-    "monster": [],
-    "underground_water_creature": [],
-    "water_ambient": [],
-    "water_creature": []
-  },
-  "temperature": 0.7
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:block.amethyst_block.chime",
+      "mood": {
+        "sound": "minecraft:block.amethyst_block.resonate",
+        "tick_delay": 4000,
+        "block_search_extent": 8,
+        "offset": 2
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [
+            {
+              "type": "resonance:crystal_rabbit",
+              "weight": 10,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 3
+              }
+            },
+            {
+              "type": "resonance:crystal_armadillo",
+              "weight": 8,
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              }
+            }
+          ],
+          "misc": [],
+          "monster": [],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
+      },
+      "modifier": "overlay"
+    }
+  }
 }

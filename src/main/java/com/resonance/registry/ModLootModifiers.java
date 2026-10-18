@@ -8,7 +8,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 /**
  * Fabric equivalent of the NeoForge global exploration-loot modifiers.
@@ -49,7 +49,7 @@ public final class ModLootModifiers {
         LootItem.Builder<?> entry = LootItem.lootTableItem(item)
                 .when(LootItemRandomChanceCondition.randomChance(chance));
         if (min != 1 || max != 1) {
-            entry.apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
+            entry.apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
         }
         table.withPool(LootPool.lootPool().add(entry));
     }

@@ -1,6 +1,5 @@
 package com.resonance.block;
 
-import com.mojang.serialization.MapCodec;
 import com.resonance.block.entity.ChorusResonatorBlockEntity;
 import com.resonance.registry.ModBlockEntities;
 import com.resonance.registry.ModItems;
@@ -35,7 +34,6 @@ public class ChorusResonatorBlock extends BaseEntityBlock {
             Block.box(4, 4, 4, 12, 10, 12),
             Block.box(5, 10, 5, 11, 14, 11)
     );
-    public static final MapCodec<ChorusResonatorBlock> CODEC = simpleCodec(ChorusResonatorBlock::new);
 
     public ChorusResonatorBlock(Properties properties) {
         super(properties);
@@ -47,10 +45,6 @@ public class ChorusResonatorBlock extends BaseEntityBlock {
         builder.add(ACTIVE, PHASE);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {

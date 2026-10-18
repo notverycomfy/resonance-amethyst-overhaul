@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -22,10 +21,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class ResonantAxeItem extends AxeItem {
+public class ResonantAxeItem extends Item {
 
     public ResonantAxeItem(ToolMaterial material, float attackDamage, float attackSpeed, Item.Properties properties) {
-        super(material, attackDamage, attackSpeed, properties);
+        super(properties.axe(material, attackDamage, attackSpeed));
     }
 
     @Override

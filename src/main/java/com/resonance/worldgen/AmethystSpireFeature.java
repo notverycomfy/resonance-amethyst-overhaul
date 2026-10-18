@@ -1,6 +1,6 @@
 package com.resonance.worldgen;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -10,23 +10,22 @@ import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AmethystSpireFeature extends Feature<NoneFeatureConfiguration> {
+public class AmethystSpireFeature implements Feature {
 
-    public AmethystSpireFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<AmethystSpireFeature> CODEC = MapCodec.unit(AmethystSpireFeature::new);
+
+    @Override
+    public MapCodec<AmethystSpireFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos origin = context.origin();
-        RandomSource random = context.random();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
 
         BlockState below = level.getBlockState(origin.below());
         if (!isSolid(below)) {

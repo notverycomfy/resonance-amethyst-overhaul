@@ -6,12 +6,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirtPathBlock;
+import net.minecraft.world.level.block.PathBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CrystalDirtPathBlock extends DirtPathBlock {
-    public CrystalDirtPathBlock(BlockBehaviour.Properties properties) { super(properties); }
+public class CrystalDirtPathBlock extends PathBlock {
+    public CrystalDirtPathBlock(BlockBehaviour.Properties properties) { super(ModBlocks.CRYSTAL_DIRT.get(), properties); }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {

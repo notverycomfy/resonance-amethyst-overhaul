@@ -35,7 +35,7 @@ public class CrystalWraithRenderer extends MobRenderer<CrystalWraithEntity, Crys
     public void extractRenderState(CrystalWraithEntity entity, CrystalWraithRenderState state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         state.armorBroken = entity.isArmorBroken();
-        state.attackAnim = entity.getAttackAnim(partialTicks);
+        state.attackAnim = entity.getSwingAnimation(partialTicks);
         state.emergenceProgress = entity.getEmergenceProgress(partialTicks);
     }
 }

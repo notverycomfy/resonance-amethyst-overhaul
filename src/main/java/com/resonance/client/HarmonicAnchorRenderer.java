@@ -39,8 +39,8 @@ public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEnt
 
     @Override
     public boolean shouldRender(HarmonicAnchorEntity entity, Frustum culler,
-                                double camX, double camY, double camZ) {
-        if (super.shouldRender(entity, culler, camX, camY, camZ)) {
+                                double camX, double camY, double camZ, float partialTicks) {
+        if (super.shouldRender(entity, culler, camX, camY, camZ, partialTicks)) {
             return true;
         }
         BlockPos target = entity.getBeamTarget();
@@ -84,8 +84,8 @@ public class HarmonicAnchorRenderer extends ThrownItemRenderer<HarmonicAnchorEnt
         beamVector = beamVector.normalize();
         float xRot = (float)Math.acos(beamVector.y);
         float yRot = (float)(Math.PI / 2) - (float)Math.atan2(beamVector.z, beamVector.x);
-        poseStack.mulPose(Axis.YP.rotationDegrees(yRot * (180.0F / (float)Math.PI)));
-        poseStack.mulPose(Axis.XP.rotationDegrees(xRot * (180.0F / (float)Math.PI)));
+        poseStack.rotate(Axis.YP.rotationDegrees(yRot * (180.0F / (float)Math.PI)));
+        poseStack.rotate(Axis.XP.rotationDegrees(xRot * (180.0F / (float)Math.PI)));
         float rot = timeInTicks * 0.05F * -1.5F;
         float texVOff = timeInTicks * 0.5F % 1.0F;
 

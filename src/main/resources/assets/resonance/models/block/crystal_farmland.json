@@ -1,1 +1,8 @@
-{"parent":"minecraft:block/template_farmland","textures":{"dirt":"resonance:block/crystal_dirt","top":"resonance:block/crystal_farmland"}}
+{
+  "parent": "minecraft:block/template_cube_bottom_top_indented",
+  "textures": {
+    "bottom": "resonance:block/crystal_dirt",
+    "side": "resonance:block/crystal_dirt",
+    "top": "resonance:block/crystal_farmland"
+  }
+}

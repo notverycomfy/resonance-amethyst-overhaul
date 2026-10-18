@@ -1,6 +1,5 @@
 package com.resonance.block;
 
-import com.mojang.serialization.MapCodec;
 import com.resonance.block.entity.ResonantLanternBlockEntity;
 import com.resonance.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -32,7 +31,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class ResonantLanternBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<ResonantLanternBlock> CODEC = simpleCodec(ResonantLanternBlock::new);
     public static final BooleanProperty HANGING = BlockStateProperties.HANGING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape SHAPE_STANDING = Shapes.or(Block.column(4.0, 7.0, 9.0), Block.column(6.0, 0.0, 7.0));
@@ -43,10 +41,6 @@ public class ResonantLanternBlock extends BaseEntityBlock implements SimpleWater
         this.registerDefaultState(this.stateDefinition.any().setValue(HANGING, false).setValue(WATERLOGGED, false));
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {

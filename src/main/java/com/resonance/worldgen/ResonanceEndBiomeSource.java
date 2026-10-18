@@ -14,7 +14,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.biome.BiomeResolver;
 
 import java.util.stream.Stream;
 
@@ -66,7 +66,11 @@ public class ResonanceEndBiomeSource extends BiomeSource {
     }
 
     @Override
-    public Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler) {
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
+        return (x, y, z) -> getNoiseBiome(x, y, z, sampler);
+    }
+
+    private Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler) {
         int blockX = QuartPos.toBlock(quartX);
         int blockY = QuartPos.toBlock(quartY);
         int blockZ = QuartPos.toBlock(quartZ);
@@ -81,7 +85,7 @@ public class ResonanceEndBiomeSource extends BiomeSource {
 
         int weirdBlockX = (SectionPos.blockToSectionCoord(blockX) * 2 + 1) * 8;
         int weirdBlockZ = (SectionPos.blockToSectionCoord(blockZ) * 2 + 1) * 8;
-        double erosion = sampler.erosion().compute(new DensityFunction.SinglePointContext(weirdBlockX, blockY, weirdBlockZ));
+        double erosion = sampler.erosion().sampleValue(weirdBlockX, blockY, weirdBlockZ);
 
         if (chunkDistSq >= INNER_EDGE_MIN && chunkDistSq <= INNER_EDGE_MAX && erosion > -0.21875) {
             return this.crystallized;
