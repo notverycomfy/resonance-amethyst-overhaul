@@ -6,6 +6,9 @@ import com.resonance.client.model.TheHarmonicModel;
 import com.resonance.registry.ModBlockEntities;
 import com.resonance.registry.ModEntities;
 import com.resonance.registry.ModSounds;
+import com.resonance.entity.TheHarmonicEntity;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.Minecraft;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
@@ -15,6 +18,7 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 
 public final class ClientEvents {
+    private static final double HARMONIC_MUSIC_RANGE_SQUARED = 128.0 * 128.0;
     public static final Music HARMONIC_MUSIC =
             new Music(ModSounds.HARMONIC_BOSS_MUSIC, 0, 0, true);
 
@@ -22,6 +26,11 @@ public final class ClientEvents {
     }
 
     public static void register() {
+        ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
+            if (minecraft.getMusicManager().isPlayingMusic(HARMONIC_MUSIC) && !isHarmonicNearby(minecraft)) {
+                minecraft.getMusicManager().stopPlaying(HARMONIC_MUSIC);
+            }
+        });
         EntityRendererRegistry.register(ModEntities.RESONANT_ARROW.get(), ResonantArrowRenderer::new);
         EntityRendererRegistry.register(ModEntities.SHATTERED_ECHO.get(), ShatteredEchoRenderer::new);
         EntityRendererRegistry.register(ModEntities.RESONANT_STALKER.get(), ResonantStalkerRenderer::new);
@@ -40,5 +49,17 @@ public final class ClientEvents {
         ModelLayerRegistry.registerModelLayer(CrystalWraithRenderer.LAYER, CrystalWraithModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(TheHarmonicRenderer.LAYER, TheHarmonicModel::createBodyLayer);
 
+    }
+    public static boolean isHarmonicNearby(Minecraft minecraft) {
+        if (minecraft.level == null || minecraft.player == null) {
+            return false;
+        }
+        for (var entity : minecraft.level.entitiesForRendering()) {
+            if (entity instanceof TheHarmonicEntity boss && boss.isAlive()
+                    && boss.distanceToSqr(minecraft.player) <= HARMONIC_MUSIC_RANGE_SQUARED) {
+                return true;
+            }
+        }
+        return false;
     }
 }
