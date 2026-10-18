@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class CrystalFarmlandBlock extends FarmlandBlock {
-    public CrystalFarmlandBlock(BlockBehaviour.Properties properties) { super(properties); }
+    public CrystalFarmlandBlock(BlockBehaviour.Properties properties) { super(ModBlocks.CRYSTAL_DIRT.get(), properties); }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {

@@ -5,6 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
+import java.util.Optional;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +34,7 @@ public class AddItemLootModifier extends LootModifier {
     private final int max;
     private final int enchantLevel;
 
-    public AddItemLootModifier(LootItemCondition[] conditions, int priority, Item item, int min, int max, int enchantLevel) {
+    public AddItemLootModifier(Optional<Holder<LootItemCondition>> conditions, int priority, Item item, int min, int max, int enchantLevel) {
         super(conditions, priority);
         this.item = item;
         this.min = min;

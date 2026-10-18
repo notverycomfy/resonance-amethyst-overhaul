@@ -1,0 +1,320 @@
+{
+  "values": {
+    "resonance:crystal_log": {
+      "transformer": "minecraft:axe",
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "resonance:crystal_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": { "id": "resonance:stripped_crystal_log" }
+              }
+            }
+          ]
+        },
+        "sound": "minecraft:item.axe.strip"
+      }
+    },
+    "resonance:crystal_wood": {
+      "transformer": "minecraft:axe",
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "resonance:crystal_wood"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": { "id": "resonance:stripped_crystal_wood" }
+              }
+            }
+          ]
+        },
+        "sound": "minecraft:item.axe.strip"
+      }
+    },
+    "resonance:crystal_dirt": {
+      "transformers": {
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:crystal_dirt"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt_path"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.shovel.flatten",
+          "disallowed_faces": [
+            "down"
+          ]
+        },
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:crystal_dirt"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_farmland"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.hoe.till",
+          "disallowed_faces": [
+            "down"
+          ]
+        }
+      }
+    },
+    "resonance:crystal_grass_block": {
+      "transformers": {
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:crystal_grass_block"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt_path"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.shovel.flatten",
+          "disallowed_faces": [
+            "down"
+          ]
+        },
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:crystal_grass_block"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_farmland"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.hoe.till",
+          "disallowed_faces": [
+            "down"
+          ]
+        }
+      }
+    },
+    "resonance:coarse_crystal_dirt": {
+      "transformers": {
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:coarse_crystal_dirt"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt_path"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.shovel.flatten",
+          "disallowed_faces": [
+            "down"
+          ]
+        },
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:coarse_crystal_dirt"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.hoe.till",
+          "disallowed_faces": [
+            "down"
+          ]
+        }
+      }
+    },
+    "resonance:rooted_crystal_dirt": {
+      "transformers": {
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "resonance:rooted_crystal_dirt"
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "blocks": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt_path"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.shovel.flatten",
+          "disallowed_faces": [
+            "down"
+          ]
+        },
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:matching_blocks",
+                  "blocks": "resonance:rooted_crystal_dirt"
+                },
+                "then": {
+                  "id": "resonance:crystal_dirt"
+                }
+              }
+            ]
+          },
+          "sound": "minecraft:item.hoe.till",
+          "disallowed_faces": [],
+          "loot": "minecraft:gameplay/till_rooted_dirt",
+          "drop_strategy": "clicked_face"
+        }
+      }
+    }
+  }
+}

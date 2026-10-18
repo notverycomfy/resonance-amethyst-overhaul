@@ -4,7 +4,6 @@
   "spawners": {
     "type": "resonance:shattered_echo",
     "weight": 10,
-    "minCount": 1,
-    "maxCount": 1
+    "count": 1
   }
 }

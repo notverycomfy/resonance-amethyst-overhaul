@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -21,10 +20,10 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ResonantShovelItem extends ShovelItem {
+public class ResonantShovelItem extends Item {
 
     public ResonantShovelItem(ToolMaterial material, float attackDamage, float attackSpeed, Item.Properties properties) {
-        super(material, attackDamage, attackSpeed, properties);
+        super(properties.shovel(material, attackDamage, attackSpeed));
     }
 
     @Override

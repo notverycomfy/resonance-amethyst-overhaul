@@ -44,7 +44,7 @@ public class Resonance {
         ModBusEvents.register(modEventBus);
         modEventBus.addListener(this::addCreative);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, Config.SPEC, "resonance-common.toml");
     }
 
     private static void place(BuildCreativeModeTabContentsEvent event, ItemStack after, DeferredItem<?> item) {

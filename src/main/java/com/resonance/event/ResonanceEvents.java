@@ -55,35 +55,12 @@ import net.neoforged.neoforge.event.entity.living.LivingUseTotemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = Resonance.MODID)
 public class ResonanceEvents {
-
-    @SubscribeEvent
-    public static void onCrystalDirtToolUse(BlockEvent.BlockToolModificationEvent event) {
-        BlockState state = event.getState();
-        if (event.getItemAbility() == ItemAbilities.SHOVEL_FLATTEN
-                && (state.is(ModBlocks.CRYSTAL_DIRT.get()) || state.is(ModBlocks.CRYSTAL_GRASS_BLOCK.get())
-                || state.is(ModBlocks.COARSE_CRYSTAL_DIRT.get()) || state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get()))) {
-            event.setFinalState(ModBlocks.CRYSTAL_DIRT_PATH.get().defaultBlockState());
-        } else if (event.getItemAbility() == ItemAbilities.HOE_TILL) {
-            if (state.is(ModBlocks.COARSE_CRYSTAL_DIRT.get()) || state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get())) {
-                event.setFinalState(ModBlocks.CRYSTAL_DIRT.get().defaultBlockState());
-                if (state.is(ModBlocks.ROOTED_CRYSTAL_DIRT.get()) && !event.isSimulated()
-                        && event.getLevel() instanceof net.minecraft.world.level.Level level) {
-                    BlockPos pos = event.getPos();
-                    Block.popResource(level, pos, new ItemStack(Items.HANGING_ROOTS));
-                }
-            } else if (state.is(ModBlocks.CRYSTAL_DIRT.get()) || state.is(ModBlocks.CRYSTAL_GRASS_BLOCK.get())) {
-                event.setFinalState(ModBlocks.CRYSTAL_FARMLAND.get().defaultBlockState());
-            }
-        }
-    }
 
     private static final Identifier LEGGINGS_SPEED_ID = Identifier.fromNamespaceAndPath(Resonance.MODID, "leggings_speed");
     private static final Identifier PATH_SPEED_ID = Identifier.fromNamespaceAndPath(Resonance.MODID, "path_speed");

@@ -4,27 +4,23 @@
   "pools": [
     {
       "rolls": 1,
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "resonance:crystal_door",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "resonance:crystal_door",
-              "properties": {
-                "half": "lower"
-              }
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "resonance:crystal_door",
+            "state": {
+              "half": "lower"
             }
-          ]
+          }
         }
-      ]
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ]
 }

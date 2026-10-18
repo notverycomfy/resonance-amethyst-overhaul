@@ -2,7 +2,6 @@ package com.resonance.registry;
 
 import com.resonance.Resonance;
 import com.resonance.block.ChorusResonatorBlock;
-import com.resonance.block.CrystalLogBlock;
 import com.resonance.block.CrystalPlantBlock;
 import com.resonance.block.CrystalGrassBlock;
 import com.resonance.block.CrystalDirtPathBlock;
@@ -109,13 +108,13 @@ public class ModBlocks {
             RotatedPillarBlock::new, ModBlocks::woodProps);
 
     public static final DeferredBlock<Block> CRYSTAL_LOG = BLOCKS.registerBlock("crystal_log",
-            props -> new CrystalLogBlock(STRIPPED_CRYSTAL_LOG::get, props), ModBlocks::woodProps);
+            RotatedPillarBlock::new, ModBlocks::woodProps);
 
     public static final DeferredBlock<Block> STRIPPED_CRYSTAL_WOOD = BLOCKS.registerBlock("stripped_crystal_wood",
             RotatedPillarBlock::new, ModBlocks::woodProps);
 
     public static final DeferredBlock<Block> CRYSTAL_WOOD = BLOCKS.registerBlock("crystal_wood",
-            props -> new CrystalLogBlock(STRIPPED_CRYSTAL_WOOD::get, props), ModBlocks::woodProps);
+            RotatedPillarBlock::new, ModBlocks::woodProps);
 
     public static final DeferredBlock<Block> CRYSTAL_PLANKS = BLOCKS.registerBlock("crystal_planks",
             Block::new, ModBlocks::woodProps);
@@ -134,7 +133,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> CRYSTAL_DOOR = BLOCKS.registerBlock("crystal_door",
             props -> new DoorBlock(CRYSTAL_BLOCK_SET, props),
-            () -> woodProps().noOcclusion().pushReaction(PushReaction.DESTROY));
+            () -> woodProps().noOcclusion().pushReaction(PushReaction.POPPED));
 
     public static final DeferredBlock<Block> CRYSTAL_TRAPDOOR = BLOCKS.registerBlock("crystal_trapdoor",
             props -> new TrapDoorBlock(CRYSTAL_BLOCK_SET, props),
@@ -143,15 +142,16 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CRYSTAL_BUTTON = BLOCKS.registerBlock("crystal_button",
             props -> new ButtonBlock(CRYSTAL_BLOCK_SET, 30, props),
             () -> BlockBehaviour.Properties.of().noCollision().strength(0.5F).sound(SoundType.AMETHYST)
-                    .pushReaction(PushReaction.DESTROY));
+                    .pushReaction(PushReaction.POPPED));
 
     public static final DeferredBlock<Block> CRYSTAL_PRESSURE_PLATE = BLOCKS.registerBlock("crystal_pressure_plate",
             props -> new PressurePlateBlock(CRYSTAL_BLOCK_SET, props),
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).noCollision()
-                    .strength(0.5F).sound(SoundType.AMETHYST).pushReaction(PushReaction.DESTROY));
+                    .strength(0.5F).sound(SoundType.AMETHYST).pushReaction(PushReaction.POPPED));
 
     public static final DeferredBlock<Block> CRYSTAL_LEAVES = BLOCKS.registerBlock("crystal_leaves",
-            props -> new net.minecraft.world.level.block.UntintedParticleLeavesBlock(0.02F, net.minecraft.core.particles.ParticleTypes.END_ROD, props),
+            props -> new net.minecraft.world.level.block.UntintedParticleLeavesBlock(0.02F, net.minecraft.core.particles.ParticleTypes.END_ROD,
+                    net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer.noAmbientSound(), props),
             () -> BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PINK)
                     .strength(0.2F)
@@ -159,8 +159,8 @@ public class ModBlocks {
                     .sound(SoundType.AMETHYST_CLUSTER)
                     .noOcclusion()
                     .isSuffocating((s, l, p) -> false)
-                    .isViewBlocking((s, l, p) -> false)
-                    .pushReaction(PushReaction.DESTROY));
+                    .isViewBlocking((s, l, p, box) -> false)
+                    .pushReaction(PushReaction.POPPED));
 
     // --- Crystal ground and flora ---
     public static final DeferredBlock<Block> CRYSTAL_DIRT = BLOCKS.registerBlock("crystal_dirt", Block::new,
@@ -191,7 +191,7 @@ public class ModBlocks {
                 .instabreak()
                 .sound(SoundType.AMETHYST_CLUSTER)
                 .offsetType(BlockBehaviour.OffsetType.XZ)
-                .pushReaction(PushReaction.DESTROY);
+                .pushReaction(PushReaction.POPPED);
     }
 
     public static final DeferredBlock<Block> CRYSTAL_GRASS = BLOCKS.registerBlock("crystal_grass",

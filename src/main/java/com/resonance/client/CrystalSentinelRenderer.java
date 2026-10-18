@@ -50,8 +50,8 @@ public class CrystalSentinelRenderer extends MobRenderer<CrystalSentinelEntity, 
 
     @Override
     public boolean shouldRender(CrystalSentinelEntity entity, Frustum culler,
-                                double camX, double camY, double camZ) {
-        if (super.shouldRender(entity, culler, camX, camY, camZ)) {
+                                double camX, double camY, double camZ, float partialTicks) {
+        if (super.shouldRender(entity, culler, camX, camY, camZ, partialTicks)) {
             return true;
         }
         LivingEntity target = entity.getBeamTarget();
@@ -104,8 +104,8 @@ public class CrystalSentinelRenderer extends MobRenderer<CrystalSentinelEntity, 
         beamVector = beamVector.normalize();
         float xRot = (float)Math.acos(beamVector.y);
         float yRot = (float)(Math.PI / 2) - (float)Math.atan2(beamVector.z, beamVector.x);
-        poseStack.mulPose(Axis.YP.rotationDegrees(yRot * (180.0F / (float)Math.PI)));
-        poseStack.mulPose(Axis.XP.rotationDegrees(xRot * (180.0F / (float)Math.PI)));
+        poseStack.rotate(Axis.YP.rotationDegrees(yRot * (180.0F / (float)Math.PI)));
+        poseStack.rotate(Axis.XP.rotationDegrees(xRot * (180.0F / (float)Math.PI)));
         float rot = timeInTicks * 0.05F * -1.5F;
         float colorScale = scale * scale;
 

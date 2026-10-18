@@ -25,11 +25,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.CherryFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
+import java.util.Optional;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.CherryTrunkPlacer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
@@ -153,7 +153,7 @@ public class CrystalForestSpreadData extends SavedData {
 
         double radiusSq = radius * radius;
         for (ChunkAccess chunk : touched) {
-            chunk.fillBiomesFromNoise((quartX, quartY, quartZ, sampler) -> {
+            chunk.fillBiomesFromNoise((quartX, quartY, quartZ) -> {
                 int bx = QuartPos.toBlock(quartX) + 2;
                 int by = QuartPos.toBlock(quartY) + 2;
                 int bz = QuartPos.toBlock(quartZ) + 2;
@@ -164,7 +164,7 @@ public class CrystalForestSpreadData extends SavedData {
                     return biome;
                 }
                 return current;
-            }, level.getChunkSource().randomState().sampler());
+            });
             chunk.markUnsaved();
         }
         level.getChunkSource().chunkMap.resendBiomesForChunks(new ArrayList<>(touched));
@@ -295,17 +295,18 @@ public class CrystalForestSpreadData extends SavedData {
                 1.0F / 6.0F,
                 1.0F / 3.0F);
 
-        TreeConfiguration configuration = new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(com.resonance.registry.ModBlocks.CRYSTAL_LOG.get()),
+        TreeFeature tree = new TreeFeature(
+                Holder.direct(new SimpleStateProvider(com.resonance.registry.ModBlocks.CRYSTAL_LOG.get().defaultBlockState())),
                 trunkPlacer,
-                BlockStateProvider.simple(com.resonance.registry.ModBlocks.CRYSTAL_LEAVES.get()),
+                Holder.direct(new SimpleStateProvider(com.resonance.registry.ModBlocks.CRYSTAL_LEAVES.get().defaultBlockState())),
                 foliagePlacer,
+                Optional.empty(),
                 new TwoLayersFeatureSize(1, 0, 2),
-                BlockStateProvider.simple(com.resonance.registry.ModBlocks.ROOTED_CRYSTAL_DIRT.get()))
-                .ignoreVines()
-                .build();
+                List.of(),
+                true,
+                Holder.direct(new SimpleStateProvider(com.resonance.registry.ModBlocks.ROOTED_CRYSTAL_DIRT.get().defaultBlockState())));
 
-        if (Feature.TREE.place(configuration, level, level.getChunkSource().getGenerator(), random, base)) {
+        if (tree.place(level, level.getChunkSource().getGenerator(), random, base)) {
             level.playSound(null, base, SoundEvents.AMETHYST_CLUSTER_PLACE,
                     SoundSource.AMBIENT, 1.5F, 0.8F);
             level.sendParticles(ParticleTypes.END_ROD,

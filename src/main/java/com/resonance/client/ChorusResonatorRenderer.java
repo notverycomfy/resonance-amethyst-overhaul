@@ -86,7 +86,7 @@ public class ChorusResonatorRenderer implements BlockEntityRenderer<ChorusResona
                 0.5F + Mth.cos(angle) * radius,
                 1.25F + bob,
                 0.5F + Mth.sin(angle) * radius);
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.time * 2.5F + slot * 120.0F));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.time * 2.5F + slot * 120.0F));
         poseStack.scale(0.45F, 0.45F, 0.45F);
         item.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();

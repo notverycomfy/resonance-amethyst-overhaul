@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import com.resonance.registry.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -20,10 +19,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 
-public class ResonantHoeItem extends HoeItem {
+public class ResonantHoeItem extends Item {
 
     public ResonantHoeItem(ToolMaterial material, float attackDamage, float attackSpeed, Item.Properties properties) {
-        super(material, attackDamage, attackSpeed, properties);
+        super(properties.hoe(material, attackDamage, attackSpeed));
     }
 
     @Override
